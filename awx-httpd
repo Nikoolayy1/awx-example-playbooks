@@ -1,0 +1,10 @@
+- name: Check bigstart status of httpd
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Run bigstart status httpd
+      ansible.builtin.shell: "bigstart status httpd"
+      register: bigstart_result
+    - name: Show command output
+      debug:
+        msg: "{{ bigstart_result.stdout }}"
