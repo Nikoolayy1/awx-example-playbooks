@@ -8,3 +8,9 @@
     - name: Show command output
       debug:
         msg: "{{ bigstart_result.stdout }}"
+    - name: Run bigstart restart httpd
+      ansible.builtin.shell: "bigstart restart httpd"
+      register: bigrestart_result
+    - name: Show command output
+      debug:
+        msg: "{{ bigrestart_result.stdout }}"
