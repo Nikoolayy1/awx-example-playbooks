@@ -14,3 +14,9 @@
     - name: Show command output
       debug:
         msg: "{{ bigrestart_result.stdout }}"
+    - name: Run new bigstart status httpd
+      ansible.builtin.shell: "bigstart status httpd"
+      register: bigstartnew_result
+    - name: New show command output
+      debug:
+        msg: "{{ bigstartnew_result.stdout }}"
