@@ -1,0 +1,27 @@
+- name: Check and restart service using bigstart
+  hosts: all
+  gather_facts: false
+  vars:
+    service_name: httpd     # ← change as needed
+  tasks:
+    - block:
+        - name: Run bigstart status {{ service_name }}
+          ansible.builtin.shell: "bigstart status {{ service_name }}"
+          register: bigstart_result
+        - name: Show initial status
+          debug:
+            msg: "{{ bigstart_result.stdout }}"
+        - name: Restart {{ service_name }}
+          ansible.builtin.shell: "bigstart restart {{ service_name }}"
+          register: bigrestart_result
+        - name: Show restart output
+          debug:
+            msg: "{{ bigrestart_result.stdout }}"
+        - name: Run new bigstart status {{ service_name }}
+          ansible.builtin.shell: "bigstart status {{ service_name }}"
+          register: bigstartnew_result
+        - name: Show new status
+          debug:
+            msg: "{{ bigstartnew_result.stdout }}"
+      when: "'f5-devices' not in group_names"
+      name: Restart service only when host is NOT in f5-devices
