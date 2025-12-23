@@ -1,5 +1,5 @@
 - name: AS3
-  hosts: bigip
+  hosts: all
   connection: httpapi
   gather_facts: false
   tasks:   
