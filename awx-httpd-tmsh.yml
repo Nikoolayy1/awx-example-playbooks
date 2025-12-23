@@ -67,5 +67,12 @@
     - name: Print BIG-IP status after
       debug:
         msg: "{{ cm_new_result.stdout[0] }}"
+    - name: Set the failover.nettimeoutsec DB variable on the BIG-IP to 5 seconds
+      bigip_sys_db:
+        key: failover.nettimeoutsec
+        value: 5
+        provider: "{{ provider }}"
+      ignore_errors: yes
+
 #    when: "'f5-devices' not in group_names"
 
