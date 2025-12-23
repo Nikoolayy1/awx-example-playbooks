@@ -23,5 +23,5 @@
         - name: Show new status
           debug:
             msg: "{{ bigstartnew_result.stdout }}"
-      when: "'f5-devices' not in group_names"
+#     when: "'f5-devices' not in group_names"
       name: Restart service only when host is NOT in f5-devices
