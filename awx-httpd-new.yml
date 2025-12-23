@@ -8,7 +8,7 @@
   tasks:
     - block:
         - name: Get failover state
-          ansible.builtin.shell: "/usr/bin/tmsh show cm failover-status"
+          ansible.builtin.shell: "/bin/bash -lc 'tmsh show cm failover-status'"
           register: failover_state
         - name: Show failover state
           debug:
