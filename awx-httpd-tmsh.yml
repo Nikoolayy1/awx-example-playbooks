@@ -13,6 +13,15 @@
         password: "{{ansible_password}}"
         server_port: 443
         validate_certs: no 
+  - name: show service
+    bigip_command:
+      commands: "show sys service {{ service_name }}"
+      provider: "{{provider}}"
+    delegate_to: localhost
+    register: status_result
+  - name: print service id
+    debug:
+      msg: "{{ status.stdout }}"
   - name: run restart service
     bigip_command:
       commands: "restart sys service {{ service_name }}"
@@ -22,4 +31,14 @@
   - name: Show restart output
     debug:
       msg: "{{ bigrestart_result.stdout }}"
+  - name: show service again
+    bigip_command:
+      commands: "show sys service {{ service_name }}"
+      provider: "{{provider}}"
+    delegate_to: localhost
+    register: statusnew_result
+  - name: print service id again
+    debug:
+      msg: "{{ statusnew.stdout }}"
       
+
