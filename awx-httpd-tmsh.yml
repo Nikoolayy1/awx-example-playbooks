@@ -11,8 +11,8 @@
       password: "{{ansible_password}}"
       server_port: 8443
       validate_certs: no 
-- name: run show version on remote devices
-  bigip_command:
-    commands: show sys version
-    provider: "{{provider}}"
-  delegate_to: localhost
+  - name: run show version on remote devices
+    bigip_command:
+      commands: show sys version
+      provider: "{{provider}}"
+    delegate_to: localhost
