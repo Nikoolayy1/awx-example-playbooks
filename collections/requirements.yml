@@ -6,3 +6,4 @@ collections:
     source: https://github.com/F5Networks/f5-ansible-f5modules#ansible_collections/f5networks/f5_modules
     type: git
     version: devel
+  - name: f5networks.f5_bigip
