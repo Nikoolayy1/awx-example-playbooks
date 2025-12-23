@@ -22,7 +22,7 @@
       register: cm_result
     - name: Print BIG-IP status before
       debug:
-        msg: "{{ cm.stdout }}"
+        msg: "{{ cm.stdout[0] }}"
     - name: Show service status before
       f5networks.f5_modules.bigip_command:
         commands: "show sys service {{ service_name }}"
