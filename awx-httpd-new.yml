@@ -2,7 +2,7 @@
   hosts: all
   gather_facts: false
   vars:
-    service_name: httpd     # ← change as needed
+#   service_name: httpd     # ← change as needed
   tasks:
     - block:
         - name: Run bigstart status {{ service_name }}
