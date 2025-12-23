@@ -3,6 +3,7 @@
   gather_facts: false
   vars:
 #   service_name: httpd     # ← change as needed
+    ansible_shell_executable: /bin/bash
   tasks:
     - block:
         - name: Get failover state
