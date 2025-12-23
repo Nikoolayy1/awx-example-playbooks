@@ -32,7 +32,7 @@
         - name: Get failover state again
           ansible.builtin.shell: tmsh show sys failover
           register: failover_state_new
-        - name: Show failover state
+        - name: Show failover state again
           debug:
             msg: "{{ failover_state_new.stdout }}"
 #    when: "'f5-devices' not in group_names"
