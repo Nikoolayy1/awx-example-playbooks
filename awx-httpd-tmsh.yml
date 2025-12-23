@@ -15,8 +15,16 @@
           password: "{{ ansible_password }}"
           server_port: 443
           validate_certs: no
+    - name: Show BIG-IP status before
+      f5networks.f5_modules.bigip_command:
+        commands: "show cm failover-status"
+        provider: "{{ provider }}"
+      register: cm_result
+    - name: Print BIG-IP status before
+      debug:
+        msg: "{{ cm.stdout }}"
     - name: Show service status before
-      f5networks.f5_bigip.bigip_command:
+      f5networks.f5_modules.bigip_command:
         commands: "show sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: status_result
