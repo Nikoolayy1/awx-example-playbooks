@@ -13,6 +13,12 @@
           password: "{{ ansible_password }}"
           server_port: 443
           validate_certs: no
+    - name: Set the failover.nettimeoutsec DB variable on the BIG-IP to 10 seconds
+      bigip_sys_db:
+        key: failover.nettimeoutsec
+        value: 10
+        provider: "{{ provider }}"
+      delegate_to: localhost
     - name: Show BIG-IP status before
       f5networks.f5_modules.bigip_command:
         commands: "show cm failover-status"
