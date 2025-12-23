@@ -1,22 +1,18 @@
-- name: Check bigstart status of httpd
-  hosts: all
-  gather_facts: false
+- name: GRAB F5 FACTS
+  hosts: lb
+  connection: local
+  gather_facts: no
   tasks:
-    - name: Run bigstart status httpd
-      ansible.builtin.shell: "show sys service httpd"
-      register: bigstart_result
-    - name: Show command output
-      debug:
-        msg: "{{ bigstart_result.stdout }}"
-    - name: Run bigstart restart httpd
-      ansible.builtin.shell: "restart sys service httpd"
-      register: bigrestart_result
-    - name: Show command output
-      debug:
-        msg: "{{ bigrestart_result.stdout }}"
-    - name: Run new bigstart status httpd
-      ansible.builtin.shell: "show sys service httpd"
-      register: bigstartnew_result
-    - name: New show command output
-      debug:
-        msg: "{{ bigstartnew_result.stdout }}"
+  - name: Set a fact named 'provider' with BIG-IP login information
+    set_fact:
+     provider:
+      server: "{{ ansible_host }}"
+      user: "{{ansible_user}}"
+      password: "{{ansible_password}}"
+      server_port: 8443
+      validate_certs: no 
+- name: run show version on remote devices
+  bigip_command:
+    commands: show sys version
+    provider: "{{provider}}"
+  delegate_to: localhost
