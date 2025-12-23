@@ -17,12 +17,12 @@
           validate_certs: no
     - name: Show BIG-IP status
       f5networks.f5_bigip.bigip_command:
-        commands: show cm failover-status
+        commands: "show cm failover-status"
         provider: "{{ provider }}"
       register: cm_result
     - name: Print BIG-IP status
       debug:
-        msg: "{{ cm_result.stdout }}"
+        msg: "{{ cm_result.stdout[0] }}"
     - name: Show service status before
       f5networks.f5_bigip.bigip_command:
         commands: "show sys service {{ service_name }}"
