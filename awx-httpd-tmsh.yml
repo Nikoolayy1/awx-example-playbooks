@@ -39,3 +39,5 @@
     - name: Print service status after
       debug:
         msg: "{{ statusnew_result.stdout }}"
+    when: "'f5-devices' not in group_names"
+
