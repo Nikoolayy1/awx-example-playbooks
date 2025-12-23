@@ -13,7 +13,7 @@
         validate_certs: no 
   - name: run restart service
     bigip_command:
-      commands: restart sys service httpd
+      commands: "restart sys service {{ service_name }}"
       provider: "{{provider}}"
     delegate_to: localhost
     register: bigrestart_result
