@@ -4,10 +4,11 @@
   vars:
 #   service_name: httpd     # ← change as needed
     ansible_shell_executable: /bin/bash
+    become: true
   tasks:
     - block:
         - name: Get failover state
-          ansible.builtin.shell: "bash -lc 'tmsh show cm failover-status'"
+          ansible.builtin.shell: tmsh show cm failover-status
           register: failover_state
         - name: Show failover state
           debug:
