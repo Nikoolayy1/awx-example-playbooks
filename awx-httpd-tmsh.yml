@@ -73,6 +73,12 @@
         value: 5
         provider: "{{ provider }}"
       ignore_errors: yes
-
+      delegate_to: localhost
+    - name: SAVE RUNNING CONFIG ON BIG-IP
+      bigip_config:
+        provider: "{{provider}}"
+        save: yes
+      delegate_to: localhost
+      ignore_errors: yes
 #    when: "'f5-devices' not in group_names"
 
