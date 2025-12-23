@@ -21,7 +21,7 @@
     register: status_result
   - name: print service id
     debug:
-      msg: "{{ status.stdout }}"
+      msg: "{{ status_result.stdout }}"
   - name: run restart service
     bigip_command:
       commands: "restart sys service {{ service_name }}"
@@ -39,6 +39,6 @@
     register: statusnew_result
   - name: print service id again
     debug:
-      msg: "{{ statusnew.stdout }}"
+      msg: "{{ statusnew_result.stdout }}"
       
 
