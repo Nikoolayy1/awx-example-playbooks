@@ -32,7 +32,7 @@
       debug:
         msg: "{{ status_result.stdout }}"
     - name: Restart service
-      f5networks.f5_bigip.bigip_command:
+      f5networks.f5_modules.bigip_command:
         commands: "restart sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: bigrestart_result
@@ -40,12 +40,23 @@
       debug:
         msg: "{{ bigrestart_result.stdout }}"
     - name: Show service status after
-      f5networks.f5_bigip.bigip_command:
+      f5networks.f5_modules.bigip_command:
         commands: "show sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: statusnew_result
     - name: Print service status after
       debug:
         msg: "{{ statusnew_result.stdout }}"
+    - name: 10 second pause
+      ansible.builtin.pause:
+        seconds: 10
+    - name: Show BIG-IP status after
+      f5networks.f5_modules.bigip_command:
+        commands: "show cm failover-status"
+        provider: "{{ provider }}"
+      register: cm_new_result
+    - name: Print BIG-IP status after
+      debug:
+        msg: "{{ cm_new_result.stdout[0] }}"
 #    when: "'f5-devices' not in group_names"
 
