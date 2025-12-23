@@ -1,5 +1,5 @@
 - name: GRAB F5 FACTS
-  hosts: lb
+  hosts: all
   connection: local
   gather_facts: no
   tasks:
