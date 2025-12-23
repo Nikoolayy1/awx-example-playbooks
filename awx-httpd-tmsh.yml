@@ -3,7 +3,7 @@
   connection: local
   gather_facts: no
   vars:
-    service_name: httpd
+#   service_name: httpd
   tasks:
   - name: Manage BIG-IP service lifecycle
     block:
