@@ -3,42 +3,39 @@
   connection: local
   gather_facts: no
   vars:
-#   service_name: httpd     # ← change as needed
+    service_name: httpd
   tasks:
-  - name: Set a fact named 'provider' with BIG-IP login information
-    set_fact:
-      provider:
-        server: "{{ ansible_host }}"
-        user: "{{ansible_user}}"
-        password: "{{ansible_password}}"
-        server_port: 443
-        validate_certs: no 
-  - name: show service
-    bigip_command:
-      commands: "show sys service {{ service_name }}"
-      provider: "{{provider}}"
-    delegate_to: localhost
-    register: status_result
-  - name: print service id
-    debug:
-      msg: "{{ status_result.stdout }}"
-  - name: run restart service
-    bigip_command:
-      commands: "restart sys service {{ service_name }}"
-      provider: "{{provider}}"
-    delegate_to: localhost
-    register: bigrestart_result
-  - name: Show restart output
-    debug:
-      msg: "{{ bigrestart_result.stdout }}"
-  - name: show service again
-    bigip_command:
-      commands: "show sys service {{ service_name }}"
-      provider: "{{provider}}"
-    delegate_to: localhost
-    register: statusnew_result
-  - name: print service id again
-    debug:
-      msg: "{{ statusnew_result.stdout }}"
-      
-
+  - name: Manage BIG-IP service lifecycle
+    block:
+    - name: Set provider with BIG-IP login information
+      set_fact:
+        provider:
+          server: "{{ ansible_host }}"
+          user: "{{ ansible_user }}"
+          password: "{{ ansible_password }}"
+          server_port: 443
+          validate_certs: no
+    - name: Show service status before
+      f5networks.f5_bigip.bigip_command:
+        commands: "show sys service {{ service_name }}"
+        provider: "{{ provider }}"
+      register: status_result
+    - name: Print service status before
+      debug:
+        msg: "{{ status_result.stdout }}"
+    - name: Restart service
+      f5networks.f5_bigip.bigip_command:
+        commands: "restart sys service {{ service_name }}"
+        provider: "{{ provider }}"
+      register: bigrestart_result
+    - name: Show restart output
+      debug:
+        msg: "{{ bigrestart_result.stdout }}"
+    - name: Show service status after
+      f5networks.f5_bigip.bigip_command:
+        commands: "show sys service {{ service_name }}"
+        provider: "{{ provider }}"
+      register: statusnew_result
+    - name: Print service status after
+      debug:
+        msg: "{{ statusnew_result.stdout }}"
