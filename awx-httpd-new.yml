@@ -7,7 +7,7 @@
   tasks:
     - block:
         - name: Get failover state
-          ansible.builtin.shell: "tmsh /show cm failover-status"
+          ansible.builtin.shell: "/usr/bin/tmsh show cm failover-status"
           register: failover_state
         - name: Show failover state
           debug:
@@ -31,7 +31,7 @@
           debug:
             msg: "{{ bigstartnew_result.stdout }}"
         - name: Get failover state again
-          ansible.builtin.shell: t"tmsh /show cm failover-status"
+          ansible.builtin.shell: "/usr/bin/tmsh show cm failover-status"
           register: failover_state_new
         - name: Show failover state again
           debug:
