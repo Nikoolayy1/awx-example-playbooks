@@ -1,9 +1,7 @@
-- name: GRAB F5 FACTS
+- name: RESTART F5 service
   hosts: all
-  connection: local
   gather_facts: no
   vars:
-#   service_name: httpd
   tasks:
   - name: Manage BIG-IP service lifecycle
     block:
@@ -20,6 +18,7 @@
         commands: "show cm failover-status"
         provider: "{{ provider }}"
       register: cm_result
+      delegate_to: localhost
     - name: Print BIG-IP status before
       debug:
         msg: "{{ cm_result.stdout[0] }}"
@@ -28,6 +27,7 @@
         commands: "show sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: status_result
+      delegate_to: localhost
     - name: Print service status before
       debug:
         msg: "{{ status_result.stdout }}"
@@ -36,6 +36,7 @@
         commands: "restart sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: bigrestart_result
+      delegate_to: localhost
     - name: Show restart output
       debug:
         msg: "{{ bigrestart_result.stdout }}"
@@ -44,6 +45,7 @@
         commands: "show sys service {{ service_name }}"
         provider: "{{ provider }}"
       register: statusnew_result
+      delegate_to: localhost
     - name: Print service status after
       debug:
         msg: "{{ statusnew_result.stdout }}"
@@ -55,6 +57,7 @@
         commands: "show cm failover-status"
         provider: "{{ provider }}"
       register: cm_new_result
+      delegate_to: localhost
     - name: Print BIG-IP status after
       debug:
         msg: "{{ cm_new_result.stdout[0] }}"
