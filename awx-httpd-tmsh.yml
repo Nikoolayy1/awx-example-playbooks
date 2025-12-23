@@ -2,6 +2,8 @@
   hosts: all
   connection: local
   gather_facts: no
+  vars:
+#   service_name: httpd     # ← change as needed
   tasks:
   - name: Set a fact named 'provider' with BIG-IP login information
     set_fact:
