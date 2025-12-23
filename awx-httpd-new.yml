@@ -5,6 +5,12 @@
 #   service_name: httpd     # ← change as needed
   tasks:
     - block:
+        - name: Get failover state
+          ansible.builtin.shell: tmsh show sys failover | awk '{print $2}'
+          register: failover_state
+        - name: Show failover state
+          debug:
+            msg: "{{ failover_state.stdout }}"
         - name: Run bigstart status {{ service_name }}
           ansible.builtin.shell: "bigstart status {{ service_name }}"
           register: bigstart_result
@@ -23,5 +29,9 @@
         - name: Show new status
           debug:
             msg: "{{ bigstartnew_result.stdout }}"
-#     when: "'f5-devices' not in group_names"
-      name: Restart service only when host is NOT in f5-devices
+        - name: Get failover state again
+          ansible.builtin.shell: tmsh show sys failover | awk '{print $2}'
+          register: failover_state_new
+        - name: Show failover state
+          debug:
+            msg: "{{ failover_state_new.stdout }}"
