@@ -35,3 +35,4 @@
         - name: Show failover state
           debug:
             msg: "{{ failover_state_new.stdout }}"
+#    when: "'f5-devices' not in group_names"
