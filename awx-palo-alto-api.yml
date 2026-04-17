@@ -2,8 +2,6 @@
   hosts: all
   connection: local
   gather_facts: false
-  collections:
-    - paloaltonetworks.panos
   vars:
     device:
       ip_address: "{{ ansible_host }}"
