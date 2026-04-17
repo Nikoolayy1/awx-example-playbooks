@@ -12,6 +12,5 @@
           '[>#] $': "show system info\n"
         timeout: 60
       register: out
-
     - debug:
         msg: "{{ out.stdout }}"
