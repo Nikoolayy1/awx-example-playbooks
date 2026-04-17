@@ -1,0 +1,27 @@
+- name: Palo Alto SSH with expect
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Show system info
+      ansible.builtin.expect:
+        command: >-
+          ssh -tt
+          -o StrictHostKeyChecking=no
+          -o UserKnownHostsFile=/dev/null
+          -o PubkeyAuthentication=no
+          -o PreferredAuthentications=keyboard-interactive,password
+          -o IdentitiesOnly=yes
+          -p 22
+          admin@{{ ansible_host | default(inventory_hostname) }}
+        responses:
+          'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\?': "yes"
+          '(?i)(\|\s*)?password:': "{{ cli_pass }}"
+          'admin@.*[>#]\s*$': "set cli scripting-mode on\nset cli pager off\ndebug software restart process web-server\nexit\n"
+          'press RETURN': "\n"
+        timeout: 90
+        echo: true
+      register: out
+      changed_when: false
+    - name: Print output
+      ansible.builtin.debug:
+        msg: "{{ out.stdout }}"
