@@ -7,10 +7,9 @@
         command: >-
           ssh {{ ssh_opts }}
           -p {{ cli_port }}
-          {{ ansible_host | default(inventory_hostname) }}
+          {{ cli_user }}@{{ ansible_host | default(inventory_hostname) }}
         responses:
           'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\?': "yes"
-          '(?i)login as:': "{{ cli_user }}"
           '(?i)(\|\s*)?password:': "{{ cli_pass }}"
           '[>#]\s*$': "show system info\nexit\n"
         timeout: 60
