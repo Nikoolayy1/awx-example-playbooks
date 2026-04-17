@@ -1,0 +1,20 @@
+- name: Palo Alto show system info via API
+  hosts: all
+  connection: local
+  gather_facts: false
+  collections:
+    - paloaltonetworks.panos
+  vars:
+    device:
+      ip_address: "{{ ansible_host | default(inventory_hostname) }}"
+      username: "{{ palo_user }}"
+      password: "{{ palo_pass }}"
+  tasks:
+    - name: Run show system info
+      paloaltonetworks.panos.panos_op:
+        provider: "{{ device }}"
+        cmd: "show system info"
+      register: system_info
+    - name: Print output
+      debug:
+        msg: "{{ system_info.stdout | default(system_info) }}"
