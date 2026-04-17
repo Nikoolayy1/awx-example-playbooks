@@ -2,8 +2,6 @@
 - name: Palo Alto SSH
   hosts: all
   gather_facts: false
-  collections:
-    - ansible.netcommon
   tasks:
     - name: Show system info
       ansible.netcommon.cli_command:
