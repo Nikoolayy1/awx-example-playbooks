@@ -1,10 +1,17 @@
-- name: Palo Alto SSH
+- name: Palo Alto SSH with expect
   hosts: all
   gather_facts: false
   tasks:
-    - name: Show system info
-      ansible.netcommon.cli_command:
-        command: show system info
+    - name: Run show system info
+      ansible.builtin.expect:
+        command: >
+          ssh -o StrictHostKeyChecking=no
+          {{ cli_user }}@{{ ansible_host | default(inventory_hostname) }}
+        responses:
+          '(?i)password:': "{{ cli_pass }}"
+          '[>#] $': "show system info\n"
+        timeout: 60
       register: out
+
     - debug:
         msg: "{{ out.stdout }}"
