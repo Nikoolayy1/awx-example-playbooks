@@ -7,4 +7,4 @@
         command: show system info
       register: out
     - debug:
-        var: out.stdout
+        msg: "{{ out.stdout }}"
