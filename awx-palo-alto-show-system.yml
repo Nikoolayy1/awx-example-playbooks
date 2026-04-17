@@ -2,19 +2,20 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Run show system info
+    - name: Show system info
       ansible.builtin.expect:
         command: >-
           ssh {{ ssh_opts }}
           -p {{ cli_port }}
-          {{ cli_user }}@{{ ansible_host | default(inventory_hostname) }}
+          {{ ansible_host | default(inventory_hostname) }}
         responses:
           'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\?': "yes"
-          '(?i).*password:.*': "{{ cli_pass }}"
+          '(?i)login as:': "{{ cli_user }}"
+          '(?i)(\|\s*)?password:': "{{ cli_pass }}"
           '[>#]\s*$': "show system info\nexit\n"
         timeout: 60
       register: out
       changed_when: false
-    - name: Show output
+    - name: Print output
       ansible.builtin.debug:
         msg: "{{ out.stdout }}"
