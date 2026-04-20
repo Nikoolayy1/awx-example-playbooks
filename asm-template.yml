@@ -40,6 +40,6 @@
           Content-Type: "application/json" 
         body_format: json
         body:
-          name: "{{ filename }}"
+          name: ansible-asm
           filename: "{{ filename }}"
         status_code: 201
