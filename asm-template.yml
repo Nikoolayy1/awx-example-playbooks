@@ -98,9 +98,10 @@
         status_code: 200
       delegate_to: localhost
       register: until_result
-      until: "until_result.json.status == COMPLETED"
       retries: 5
       delay: 5
+      until: until_result.json.status == "COMPLETED"
+      failed_when: false
     - name: Print full response body for task id 
       debug:
         var: until_result.json
