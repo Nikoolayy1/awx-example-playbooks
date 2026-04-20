@@ -4,7 +4,7 @@
   vars:
     src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
     filename: "{{ src_url | basename }}"
-    local_file: "/tmp/ansible-file.xml"
+    local_file: "/tmp/{{ filename }}"
   tasks:
     - name: Download file from GitHub
       ansible.builtin.get_url:
