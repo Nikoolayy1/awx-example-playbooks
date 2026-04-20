@@ -1,0 +1,23 @@
+- name: RESTART F5 service
+  hosts: all
+  gather_facts: no
+  vars:
+  tasks:
+  - name: Manage BIG-IP service lifecycle
+    block:
+    - name: Set provider with BIG-IP login information
+      set_fact:
+        provider:
+          server: "{{ ansible_host }}"
+          user: "{{ ansible_user }}"
+          password: "{{ ansible_password }}"
+          server_port: 443
+          validate_certs: no
+    - name: Operational command execution
+      f5networks.f5_modules.bigip_command:
+        commands: "show cm failover-status"
+        provider: "{{ provider }}"
+      register: command_result
+    - name: Show command execution
+      debug:
+        msg: "{{ command_result.stdout }}"
