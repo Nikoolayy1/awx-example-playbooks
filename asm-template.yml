@@ -54,12 +54,12 @@
         status_code: 201
       delegate_to: localhost
       register: template_result
-    - name: Print BIG-IP template status
+    - name: Print full response body for template
       debug:
-        var: template_result.msg
+       var: template_result.json
     - name: Set task ID
       set_fact:
-        asm_task_id: "{{ template_result.msg.id }}"
+        asm_task_id: "{{ template_result.json.id }}"
     - name: See ASM ID
       ansible.builtin.uri:
         url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}"
