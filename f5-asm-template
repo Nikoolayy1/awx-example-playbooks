@@ -33,7 +33,7 @@
         debug:
           msg: "{{ result.stdout }}"
     - name: Import ASM (raw inline JSON)
-      uri:
+      ansible.builtin.uri:
         url: "https://{{ bigip_host }}/mgmt/tm/asm/tasks/import-policy-template"
         method: POST
         user: "{{ ansible_user }}"
