@@ -31,7 +31,7 @@
       register: result
     - name: New show command output
       debug:
-        msg: "{{ result.stdout }}"
+        msg: "{{ result.stdout[0] }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
