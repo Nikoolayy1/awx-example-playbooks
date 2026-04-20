@@ -44,7 +44,7 @@
           Content-Type: "application/json" 
         body_format: json
         body:
-          name: " {{ template-name }} "
+          name: " {{ template_name }} "
           filename: " {{ filename }} "
         status_code: 201
       register: template_result
