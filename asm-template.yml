@@ -17,7 +17,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/ansible-asm.xml"
+        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -44,8 +44,8 @@
           Content-Type: "application/json" 
         body_format: json
         body:
-          name: ansible-asm
-          filename: ansible-asm.xml
+          name: " {{ template-name }} "
+          filename: " {{ filename }} "
         status_code: 201
       register: template_result
     - name: Print BIG-IP template status
