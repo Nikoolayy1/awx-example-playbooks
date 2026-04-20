@@ -93,4 +93,4 @@
         - name: Print error
           debug:
             var: ansible_failed_result
-      when: "hec not in {{ inventory_hostname }}"
+      when: "hec not in {{ inventory_hostname | string }}"
