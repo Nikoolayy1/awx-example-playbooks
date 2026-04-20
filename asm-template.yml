@@ -62,7 +62,7 @@
         asm_task_id: "{{ template_result.msg.id }}"
     - name: See ASM ID
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}?ver=17.5.1"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}"
         method: GET
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
