@@ -81,9 +81,27 @@
         status_code: 200
       delegate_to: localhost
       register: task_result
-    - name: Pause for 10 seconds before showing task id
-      ansible.builtin.pause:
-        seconds: 10
     - name: Print full response body for task id 
       debug:
         var: task_result.json
+    - name: See ASM ID after couple of retries
+      ansible.builtin.uri:
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}"
+        method: GET
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_ssh_pass }}"
+        force_basic_auth: yes
+        validate_certs: no
+        return_content: true
+        headers:
+          Content-Type: "application/json" 
+        status_code: 200
+      delegate_to: localhost
+      register: until_result
+      until: until_result.json.status == "COMPLETED"
+      retries: 5
+      delay: 5
+    - name: Print full response body for task id 
+      debug:
+        var: until_result.json
+        
