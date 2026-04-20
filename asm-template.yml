@@ -11,7 +11,13 @@
         url: "{{ src_url }}"
         dest: "{{ local_file }}"
         mode: "0644"
+        validate_certs: no
+        return_content: true
       delegate_to: localhost
+      register: github_result
+    - name: Print BIG-IP file upload status
+      debug:
+        var: "{{ github_result.content }}"
     - name: Get file size
       ansible.builtin.stat:
         path: "{{ local_file }}"
@@ -35,7 +41,7 @@
       register: file_result
     - name: Print BIG-IP file upload status
       debug:
-        msg: "{{ file_result.content }}"
+        var: "{{ file_result.content }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
