@@ -15,7 +15,7 @@
           validate_certs: no
     - name: Operational command execution
       f5networks.f5_modules.bigip_command:
-        commands: "show cm failover-status"
+        commands: "{{ command_var }}"
         provider: "{{ provider }}"
       register: command_result
     - name: Show command execution
