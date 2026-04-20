@@ -30,8 +30,8 @@
         status_code: 200
       register: result
     - name: New show command output
-        debug:
-          msg: "{{ result.stdout }}"
+      debug:
+        msg: "{{ result.stdout }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ bigip_host }}/mgmt/tm/asm/tasks/import-policy-template"
