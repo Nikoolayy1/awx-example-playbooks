@@ -2,7 +2,7 @@
   hosts: lb
   gather_facts: false
   vars:
-    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
+    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-test.xml"
     filename: "{{ src_url | basename }}"
     local_file: "/tmp/{{ filename }}"
   tasks:
