@@ -36,8 +36,8 @@
       uri:
         url: "https://{{ bigip_host }}/mgmt/tm/asm/tasks/import-policy-template"
         method: POST
-        user: "{{ bigip_user }}"
-        password: "{{ bigip_pass }}"
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_ssh_pass }}"
         force_basic_auth: yes
         validate_certs: no
         headers:
