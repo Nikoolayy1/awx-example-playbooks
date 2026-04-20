@@ -56,9 +56,6 @@
       register: template_result
     - name: Print BIG-IP template status
       debug:
-        msg: "{{ template_result.json }}"
-    - name: Save BIG-IP template job ID
-      debug:
         var: template_result.msg
     - name: Set task ID
       set_fact:
