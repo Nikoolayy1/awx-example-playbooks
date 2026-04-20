@@ -57,9 +57,10 @@
     - name: Print BIG-IP template status
       debug:
         msg: "{{ template_result.json }}"
+        var: template_result.msg
     - name: Set task ID
       set_fact:
-        asm_task_id: "{{ template_result.json.msg.id }}"
+        asm_task_id: "{{ template_result.msg.id }}"
     - name: See ASM ID
       ansible.builtin.uri:
         url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}"
