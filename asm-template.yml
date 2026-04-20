@@ -73,3 +73,7 @@
           Content-Type: "application/json" 
         status_code: 200
       delegate_to: localhost
+      register: task_result
+    - name: Print full response body for task id 
+      debug:
+        var: task_result.json
