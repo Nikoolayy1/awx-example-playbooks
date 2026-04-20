@@ -3,7 +3,8 @@
   gather_facts: false
   vars:
     src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
-    local_file: "/tmp/ansible-asm.xml"
+    filename: "{{ src_url | basename }}"
+    local_file: "/tmp/{{ filename }}"
   tasks:
     - name: Download file from GitHub
       ansible.builtin.get_url:
@@ -16,7 +17,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ local_file | basename }}"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -41,13 +42,8 @@
         validate_certs: no
         headers:
           Content-Type: "application/json" 
-        body: |
-          {
-          "name": "my-import-task",
-          "filename": "F5-asm-template",
-          "policy": {
-            "name": "my-policy",
-            "partition": "Common"
-          }
-          }
-    status_code: 200
+        body_format: json
+        body:
+          name: "{{ filename }}"
+          filename: "{{ filename }}"
+        status_code: 200
