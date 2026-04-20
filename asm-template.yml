@@ -31,7 +31,7 @@
       register: file_result
     - name: Print BIG-IP file upload status
       debug:
-        msg: "{{ file_result.json }}"
+        msg: "{{ file_result }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
