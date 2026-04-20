@@ -19,7 +19,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/ansible-file.xml"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/ansible-file.xml"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -38,7 +38,7 @@
         msg: "{{ file_result.content }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
-        url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -57,3 +57,19 @@
     - name: Print BIG-IP template status
       debug:
         msg: "{{ template_result.json }}"
+    - name: Set task ID
+      set_fact:
+        asm_task_id: "{{ template_result.msg.id }}"
+    - name: See ASM ID
+      ansible.builtin.uri:
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}?ver=17.5.1"
+        method: GET
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_ssh_pass }}"
+        force_basic_auth: yes
+        validate_certs: no
+        return_content: true
+        headers:
+          Content-Type: "application/json" 
+        status_code: 200
+      delegate_to: localhost
