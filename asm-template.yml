@@ -23,6 +23,7 @@
         password: "{{ ansible_ssh_pass }}"
         force_basic_auth: true
         validate_certs: false
+        return_content: true
         headers:
           Content-Type: "application/octet-stream"
           Content-Range: "0-{{ file_stat.stat.size | int - 2 }}/{{ file_stat.stat.size | int - 1 }}"
@@ -31,7 +32,7 @@
       register: file_result
     - name: Print BIG-IP file upload status
       debug:
-        msg: "{{ file_result }}"
+        msg: "{{ file_result.content }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
@@ -40,6 +41,7 @@
         password: "{{ ansible_ssh_pass }}"
         force_basic_auth: yes
         validate_certs: no
+        return_content: true
         headers:
           Content-Type: "application/json" 
         body_format: json
