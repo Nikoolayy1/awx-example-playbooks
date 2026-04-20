@@ -16,7 +16,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/shared/file-transfer/uploads/{{ local_file | basename }}"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ local_file | basename }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
