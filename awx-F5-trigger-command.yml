@@ -1,6 +1,7 @@
 - name: RESTART F5 service
   hosts: all
   gather_facts: no
+  connection: local
   vars:
   tasks:
   - name: Manage BIG-IP service lifecycle
