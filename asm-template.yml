@@ -2,9 +2,8 @@
   hosts: lb
   gather_facts: false
   vars:
-    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-test.xml"
-    filename: "{{ src_url | basename }}"
-    local_file: "/tmp/{{ filename }}"
+    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/{{ file }}"
+    local_file: "/tmp/{{ file }}"
   tasks:
     - name: Download file from GitHub
       ansible.builtin.get_url:
@@ -24,7 +23,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ file }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -55,7 +54,7 @@
         body_format: json
         body:
           name: "{{ template_name }}"
-          filename: "{{ filename }}"
+          filename: "{{ file }}"
         status_code: 201
       delegate_to: localhost
       register: template_result
