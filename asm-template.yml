@@ -12,12 +12,11 @@
         dest: "{{ local_file }}"
         mode: "0644"
         validate_certs: no
-        return_content: true
       delegate_to: localhost
       register: github_result
     - name: Print github status
       debug:
-        var: github_result.content 
+        var: github_result
     - name: Get file size
       ansible.builtin.stat:
         path: "{{ local_file }}"
