@@ -24,7 +24,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/ansible-file.xml"
+        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -54,8 +54,8 @@
           Content-Type: "application/json" 
         body_format: json
         body:
-          name: ansible-2
-          filename: ansible-file.xml
+          name: "{{ template_name }}"
+          filename: "{{ filename }}"
         status_code: 201
       delegate_to: localhost
       register: template_result
