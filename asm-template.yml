@@ -1,5 +1,5 @@
 - name: Upload ASM template
-  hosts: localhost
+  hosts: lb
   gather_facts: false
   vars:
     src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
