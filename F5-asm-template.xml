@@ -2,11 +2,8 @@
   hosts: localhost
   gather_facts: false
   vars:
-    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/F5-asm-template"
-    local_file: "/tmp/F5-asm-template"
-    bigip_host: {{ inventory_hostname }}
-    bigip_user: "{{ ansible_user }}"
-    bigip_pass: "{{  ansible_password }}"
+    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
+    local_file: "/tmp/ansible-asm.xml"
   tasks:
     - name: Download file from GitHub
       ansible.builtin.get_url:
@@ -19,10 +16,10 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ bigip_host }}/mgmt/shared/file-transfer/uploads/{{ local_file | basename }}"
+        url: "https://{{ inventory_hostname }}/mgmt/shared/file-transfer/uploads/{{ local_file | basename }}"
         method: POST
-        user: "{{ bigip_user }}"
-        password: "{{ bigip_pass }}"
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_ssh_pass }}"
         force_basic_auth: true
         validate_certs: false
         headers:
@@ -30,9 +27,7 @@
           Content-Range: "0-{{ file_stat.stat.size | int - 1 }}/{{ file_stat.stat.size }}"
         body: "{{ lookup('file', local_file) }}"
         status_code: 200
-
-
-    register: result
-  - name: New show command output
-      debug:
-        msg: "{{ result.stdout }}"
+      register: result
+    - name: New show command output
+        debug:
+          msg: "{{ result.stdout }}"
