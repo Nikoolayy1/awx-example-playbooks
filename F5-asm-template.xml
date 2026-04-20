@@ -31,3 +31,23 @@
     - name: New show command output
         debug:
           msg: "{{ result.stdout }}"
+    - name: Import ASM (raw inline JSON)
+      uri:
+        url: "https://{{ bigip_host }}/mgmt/tm/asm/tasks/import-policy-template"
+        method: POST
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_pass }}"
+        force_basic_auth: yes
+        validate_certs: no
+        headers:
+          Content-Type: "application/json" 
+        body: |
+          {
+          "name": "my-import-task",
+          "filename": "F5-asm-template",
+          "policy": {
+            "name": "my-policy",
+            "partition": "Common"
+          }
+          }
+    status_code: 200
