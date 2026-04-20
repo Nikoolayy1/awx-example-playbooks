@@ -93,7 +93,4 @@
         - name: Print error
           debug:
             var: ansible_failed_result
-      always:
-        - name: Always print final status
-          debug:
-            msg: "{{ until_result.json if (until_result is defined and until_result.json is defined) else 'No result' }}"
+      when: "hec in {{ inventory_hostname }}"
