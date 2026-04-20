@@ -40,7 +40,7 @@
     - name: Print BIG-IP file upload status
       debug:
         var: file_result.content
-    - name: Pause for 5 minutes to build app cache
+    - name: Pause for 10 seconds before creating template from file
       ansible.builtin.pause:
         seconds: 10
     - name: Import ASM (raw inline JSON)
@@ -81,6 +81,9 @@
         status_code: 200
       delegate_to: localhost
       register: task_result
+    - name: Pause for 10 seconds before showing task id
+      ansible.builtin.pause:
+        seconds: 10
     - name: Print full response body for task id 
       debug:
         var: task_result.json
