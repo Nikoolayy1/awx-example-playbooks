@@ -16,3 +16,6 @@
       validate_certs: no
       return_content: yes
     register: result
+  - name: New show command output
+      debug:
+        msg: "{{ result.stdout }}"
