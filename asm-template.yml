@@ -45,7 +45,7 @@
         body_format: json
         body:
           name: ansible-2
-          filename: " niki~{{ filename }} "
+          filename: " {{ filename }} "
         status_code: 201
       register: template_result
     - name: Print BIG-IP template status
