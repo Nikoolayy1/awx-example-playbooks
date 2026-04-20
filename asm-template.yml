@@ -29,7 +29,7 @@
         body: "{{ lookup('file', local_file) }}"
         status_code: 200
       register: file_result
-    - name: Print BIG-IP status before
+    - name: Print BIG-IP file upload status
       debug:
         msg: "{{ file_result.stdout[0] }}"
     - name: Import ASM (raw inline JSON)
