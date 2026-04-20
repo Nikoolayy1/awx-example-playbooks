@@ -44,8 +44,8 @@
           Content-Type: "application/json" 
         body_format: json
         body:
-          name: " {{ template }} "
-          filename: ansible-2
+          name: ansible-2
+          filename: " {{ filename }} "
         status_code: 201
       register: template_result
     - name: Print BIG-IP template status
