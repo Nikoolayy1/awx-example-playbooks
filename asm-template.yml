@@ -11,6 +11,7 @@
         url: "{{ src_url }}"
         dest: "{{ local_file }}"
         mode: "0644"
+      delegate_to: localhost
     - name: Get file size
       ansible.builtin.stat:
         path: "{{ local_file }}"
@@ -29,6 +30,7 @@
           Content-Range: "0-{{ file_stat.stat.size | int - 2 }}/{{ file_stat.stat.size | int - 1 }}"
         body: "{{ lookup('file', local_file) }}"
         status_code: 200
+      delegate_to: localhost
       register: file_result
     - name: Print BIG-IP file upload status
       debug:
@@ -49,6 +51,7 @@
           name: ansible-2
           filename: ansible-file.xml
         status_code: 201
+      delegate_to: localhost
       register: template_result
     - name: Print BIG-IP template status
       debug:
