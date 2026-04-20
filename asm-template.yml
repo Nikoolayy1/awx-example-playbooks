@@ -17,7 +17,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
+        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -34,7 +34,7 @@
         msg: "{{ result.stdout }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
-        url: "https://{{ bigip_host }}/mgmt/tm/asm/tasks/import-policy-template"
+        url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
