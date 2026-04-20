@@ -4,7 +4,7 @@
   vars:
     src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/ansible-asm.xml"
     filename: "{{ src_url | basename }}"
-    local_file: "/tmp/{{ filename }}"
+    local_file: "/tmp/ansible-asm.xml"
   tasks:
     - name: Download file from GitHub
       ansible.builtin.get_url:
@@ -17,7 +17,7 @@
       register: file_stat
     - name: Upload file to F5
       ansible.builtin.uri:
-        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/{{ filename }}"
+        url: "https://{{ server }}/mgmt/tm/asm/file-transfer/uploads/ansible-asm.xml"
         method: POST
         user: "{{ ansible_user }}"
         password: "{{ ansible_ssh_pass }}"
@@ -41,5 +41,5 @@
         body_format: json
         body:
           name: ansible-asm
-          filename: "{{ filename }}"
+          filename: ansible-asm.xml
         status_code: 201
