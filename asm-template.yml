@@ -28,6 +28,10 @@
           Content-Range: "0-{{ file_stat.stat.size | int - 2 }}/{{ file_stat.stat.size | int - 1 }}"
         body: "{{ lookup('file', local_file) }}"
         status_code: 200
+      register: file_result
+    - name: Print BIG-IP status before
+      debug:
+        msg: "{{ file_result.stdout[0] }}"
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ server }}/mgmt/tm/asm/tasks/import-policy-template"
