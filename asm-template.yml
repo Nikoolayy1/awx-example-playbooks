@@ -40,6 +40,9 @@
     - name: Print BIG-IP file upload status
       debug:
         var: file_result.content
+    - name: Pause for 5 minutes to build app cache
+      ansible.builtin.pause:
+        seconds: 10
     - name: Import ASM (raw inline JSON)
       ansible.builtin.uri:
         url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
