@@ -25,7 +25,7 @@
         validate_certs: false
         headers:
           Content-Type: "application/octet-stream"
-          Content-Range: "0-{{ file_stat.stat.size | int - 1 }}/{{ file_stat.stat.size }}"
+          Content-Range: "0-{{ file_stat.stat.size | int - 2 }}/{{ file_stat.stat.size | int - 1 }}"
         body: "{{ lookup('file', local_file) }}"
         status_code: 201
       register: result
