@@ -1,5 +1,5 @@
 - name: RESTART F5 service
-  hosts: all
+  hosts: lb
   gather_facts: no
   connection: local
   vars:
