@@ -50,4 +50,4 @@
       register: template_result
     - name: Print BIG-IP template status
       debug:
-        msg: "{{ template_result }}"
+        msg: "{{ template_result.stdout[0] }}"
