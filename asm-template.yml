@@ -48,6 +48,6 @@
           filename: ansible-asm.xml
         status_code: 201
       register: template_result
-    - name: Print BIG-IP file upload status
+    - name: Print BIG-IP template status
       debug:
         msg: "{{ template_result }}"
