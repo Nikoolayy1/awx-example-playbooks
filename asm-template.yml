@@ -62,7 +62,7 @@
             status_code: 201
           delegate_to: localhost
           register: template_result
-          when: "'CREATE' is (TASK)"
+          when: TASK == "CREATE"
         - name: See ASM Template UUID
           ansible.builtin.uri:
             url: "https://{{ inventory_hostname }}/mgmt/tm/asm/policy-templates?$filter=name eq {{ template_name }}"
@@ -77,15 +77,15 @@
             status_code: 200
           delegate_to: localhost
           register: template_id_result
-          when: "'UPDATE' is (TASK)"
+          when: TASK == "UPDATE"
         - name: Print existing template
           debug:
             var: template_id_result.json
-          when: "'UPDATE' is (TASK)"
+          when: TASK == "UPDATE"
         - name: Set task ID
           set_fact:
             asm_template_id:  "{{ template_id_result.json.items[0].id }}"
-          when: "'UPDATE' is (TASK)"
+          when: TASK == "UPDATE"
         - name: Update ASM Template
           ansible.builtin.uri:
             url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
@@ -105,7 +105,7 @@
             status_code: 201
           delegate_to: localhost
           register: template_result
-          when: "'UPDATE' is (TASK)"
+          when: TASK == "UPDATE"
         - name: Print full response body for template
           debug:
             var: template_result.json
