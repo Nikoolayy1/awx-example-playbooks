@@ -62,9 +62,7 @@
             status_code: 201
           delegate_to: localhost
           register: template_result
-        - name: Print full response body for template
-          debug:
-            var: template_result.json
+          when: "'CREATE' is (TASK)"
         - name: See ASM Template UUID
           ansible.builtin.uri:
             url: "https://{{ inventory_hostname }}/mgmt/tm/asm/policy-templates?$filter=name eq {{ template_name }}"
@@ -79,12 +77,15 @@
             status_code: 200
           delegate_to: localhost
           register: template_id_result
+          when: "'UPDATE' is (TASK)"
         - name: Print existing template
           debug:
             var: template_id_result.json
+          when: "'UPDATE' is (TASK)"
         - name: Set task ID
           set_fact:
-            asm_task_id:  "{{ policy_result.json.items[0].id }}"
+            asm_template_id:  "{{ template_id_result.json.items[0].id }}"
+          when: "'UPDATE' is (TASK)"
         - name: Update ASM Template
           ansible.builtin.uri:
             url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
@@ -100,10 +101,11 @@
             body:
               filename: "{{ file }}"
               policyTemplate: 
-                 id: 
+                 id: "{{  asm_template_id }}"
             status_code: 201
           delegate_to: localhost
           register: template_result
+          when: "'UPDATE' is (TASK)"
         - name: Print full response body for template
           debug:
             var: template_result.json
@@ -135,4 +137,4 @@
         - name: Print error
           debug:
             var: ansible_failed_result
-      when: 'hec' not in (inventory_hostname | string)
+      when: "'hec' not in (inventory_hostname | string)"
