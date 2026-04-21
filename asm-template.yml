@@ -65,6 +65,48 @@
         - name: Print full response body for template
           debug:
             var: template_result.json
+        - name: See ASM Template UUID
+          ansible.builtin.uri:
+            url: "https://{{ inventory_hostname }}/mgmt/tm/asm/policy-templates?$filter=name eq {{ template_name }}"
+            method: GET
+            user: "{{ ansible_user }}"
+            password: "{{ ansible_ssh_pass }}"
+            force_basic_auth: yes
+            validate_certs: no
+            return_content: true
+            headers:
+              Content-Type: "application/json"
+            status_code: 200
+          delegate_to: localhost
+          register: template_id_result
+        - name: Print existing template
+          debug:
+            var: template_id_result.json
+        - name: Set task ID
+          set_fact:
+            asm_task_id:  "{{ policy_result.json.items[0].id }}"
+        - name: Update ASM Template
+          ansible.builtin.uri:
+            url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
+            method: POST
+            user: "{{ ansible_user }}"
+            password: "{{ ansible_ssh_pass }}"
+            force_basic_auth: yes
+            validate_certs: no
+            return_content: true
+            headers:
+              Content-Type: "application/json"
+            body_format: json
+            body:
+              filename: "{{ file }}"
+              policyTemplate: 
+                 id: 
+            status_code: 201
+          delegate_to: localhost
+          register: template_result
+        - name: Print full response body for template
+          debug:
+            var: template_result.json
         - name: Set task ID
           set_fact:
             asm_task_id: "{{ template_result.json.id }}"
@@ -93,4 +135,4 @@
         - name: Print error
           debug:
             var: ansible_failed_result
-      when: "'hec' not in (inventory_hostname | string)"
+      when: 'hec' not in (inventory_hostname | string)
