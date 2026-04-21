@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<policy integrity_check="1365fae9ead57fdf0ded04d440118ec5" bigip_version="17.5.1" name="/Common/test-policy">
+<policy integrity_check="62af1cff8db7358616dd2a8ba2443356" bigip_version="17.5.1" name="/Common/niki-test">
   <type>Security</type>
   <policy_version>
-    <timestamp>2026-04-20T08:44:17Z</timestamp>
+    <timestamp>2025-12-03T16:06:06Z</timestamp>
     <device_name>bigip1.com</device_name>
-    <policy_name>/Common/test-policy</policy_name>
-    <last_change>Policy Server Technology jQuery [add]: Server Technology was set to jQuery. { audit: policy = /Common/test-policy, username = niki, client IP = 192.168.1.100 }</last_change>
+    <policy_name>/Common/niki-test</policy_name>
+    <last_change>OpenApi File openapi.json [add] { audit: policy = /Common/niki-test, username = niki, client IP = 192.168.1.133 }</last_change>
   </policy_version>
   <encoding>utf-8</encoding>
-  <description>Rapid Deployment Policy</description>
+  <description>Swagger Petstore - OpenAPI 3.0</description>
   <case_insensitive>false</case_insensitive>
   <owa>false</owa>
   <managed_by_bewaf>false</managed_by_bewaf>
-  <protocol_free>false</protocol_free>
+  <protocol_free>true</protocol_free>
   <policy_template>Rapid Deployment Policy</policy_template>
   <general>
-    <path_parameter_handling>as parameters</path_parameter_handling>
+    <path_parameter_handling>as url</path_parameter_handling>
     <mask_sensitive>true</mask_sensitive>
-    <trigger_asm_irule_event>Disabled</trigger_asm_irule_event>
+    <trigger_asm_irule_event>Enabled: Normal Mode</trigger_asm_irule_event>
     <staging_period_in_days>7</staging_period_in_days>
     <enable_correlation>true</enable_correlation>
   </general>
@@ -39,18 +39,15 @@
     <csrf_url>
       <target_pattern>*</target_pattern>
       <wildcard_order>1</wildcard_order>
-      <last_updated>2026-04-03T21:44:56Z</last_updated>
+      <last_updated>2023-11-14T14:30:22Z</last_updated>
       <csrf_url_method>POST</csrf_url_method>
       <csrf_url_enforcement_action>verify-csrf-token</csrf_url_enforcement_action>
       <required_parameters>ignore</required_parameters>
     </csrf_url>
   </csrf>
   <allowed_response_code>400</allowed_response_code>
-  <allowed_response_code>401</allowed_response_code>
   <allowed_response_code>404</allowed_response_code>
-  <allowed_response_code>407</allowed_response_code>
-  <allowed_response_code>417</allowed_response_code>
-  <allowed_response_code>503</allowed_response_code>
+  <allowed_response_code>422</allowed_response_code>
   <blocking>
     <enforcement_mode>blocking</enforcement_mode>
     <passive_mode>disabled</passive_mode>
@@ -67,14 +64,14 @@
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
     <violation name="Login URL expired" id="PARSER_EXPIRED_INGRESS_OBJECT">
-      <alarm>false</alarm>
-      <block>false</block>
+      <alarm>true</alarm>
+      <block>true</block>
       <learn>false</learn>
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
     <violation name="Login URL bypassed" id="ILLEGAL_INGRESS_OBJECT">
-      <alarm>false</alarm>
-      <block>false</block>
+      <alarm>true</alarm>
+      <block>true</block>
       <learn>false</learn>
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
@@ -277,8 +274,8 @@
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
     <violation name="Illegal file type" id="OBJ_TYPE">
-      <alarm>true</alarm>
-      <block>true</block>
+      <alarm>false</alarm>
+      <block>false</block>
       <learn>false</learn>
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
@@ -589,9 +586,9 @@
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
     <violation name="Illegal repeated header" id="HEADER_REPEATED">
-      <alarm>false</alarm>
-      <block>false</block>
-      <learn>false</learn>
+      <alarm>true</alarm>
+      <block>true</block>
+      <learn>true</learn>
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
     <violation name="Violation Rating Threat detected" id="VIOL_RATING_THREAT_DETECTED">
@@ -647,8 +644,8 @@
         <attack_type>Authentication/Authorization Attacks</attack_type>
         <internal_id>100</internal_id>
       </properties>
-      <alarm>false</alarm>
-      <block>false</block>
+      <alarm>true</alarm>
+      <block>true</block>
       <learn>false</learn>
       <policy_builder_tracking>enabled</policy_builder_tracking>
     </violation>
@@ -735,12 +732,15 @@
     <web_services_security_settings policy_builder_tracking="enabled" name="XML_WSS_TIMESTAMP_EXPIRATION_TOO_FAR_IN_THE_FUTURE">enabled</web_services_security_settings>
     <web_services_security_settings policy_builder_tracking="enabled" name="XML_WSS_UNSIGNED_TIMESTAMP">enabled</web_services_security_settings>
     <response_page cause="default">
-      <response_type>default</response_type>
-      <response_header>HTTP/1.1 200 OK
+      <response_type>custom</response_type>
+      <response_header>HTTP/1.1 403 Forbidden
 Cache-Control: no-cache
 Pragma: no-cache
-Connection: close</response_header>
-      <response_html_code>&lt;html>&lt;head>&lt;title>Request Rejected&lt;/title>&lt;/head>&lt;body>The requested URL was rejected. Please consult with your administrator.&lt;br>&lt;br>Your support ID is: &lt;%TS.request.ID()%>&lt;br>&lt;br>&lt;a href='javascript:history.back();'>[Go Back]&lt;/a>&lt;/body>&lt;/html></response_html_code>
+Content-type: application/json
+Connection: close
+</response_header>
+      <response_html_code>{"supportID": "&lt;%TS.request.ID()%>"}
+</response_html_code>
       <ajax_action_type>redirect</ajax_action_type>
     </response_page>
     <response_page cause="XML">
@@ -871,7 +871,7 @@ Connection: close</response_header>
     </response_page_settings>
   </blocking>
   <session_awareness>
-    <enabled>false</enabled>
+    <enabled>true</enabled>
     <lifetime_window>900</lifetime_window>
     <violation_actions_enabled>true</violation_actions_enabled>
     <session>
@@ -911,7 +911,7 @@ Connection: close</response_header>
     <block_all_period>600</block_all_period>
     <block_all_period_enabled>true</block_all_period_enabled>
     <block_only_autheticated>false</block_only_autheticated>
-    <session_hijacking_enabled>false</session_hijacking_enabled>
+    <session_hijacking_enabled>true</session_hijacking_enabled>
     <application_username_type>4</application_username_type>
     <delay_blocking>
       <violations>
@@ -1195,18 +1195,104 @@ Connection: close</response_header>
       <metachar character="0xff">allow</metachar>
     </character_set>
   </gwt_profiles>
+  <json_validation_files>
+    <json_validation_file checksum="jvDQgL2myeObTLWqXG_QBg" name="json_PUT_~api~v3~user~#">{"xml":{"name":"user"},"type":"object","$schema":"http://json-schema.org/draft-04/schema#","properties":{"firstName":{"example":"John","type":"string"},"phone":{"example":"12345","type":"string"},"username":{"example":"theUser","type":"string"},"email":{"example":"john@email.com","type":"string"},"password":{"example":"12345","type":"string"},"userStatus":{"example":1,"format":"int32","type":"integer","description":"User Status"},"id":{"example":10,"format":"int64","type":"integer"},"lastName":{"example":"James","type":"string"}}}</json_validation_file>
+    <json_validation_file checksum="kNVnY0RYBD11sf0lcepAPg" name="json_POST_~api~v3~user">{"xml":{"name":"user"},"type":"object","$schema":"http://json-schema.org/draft-04/schema#","properties":{"firstName":{"example":"John","type":"string"},"phone":{"example":"12345","type":"string"},"username":{"example":"theUser","type":"string"},"email":{"example":"john@email.com","type":"string"},"password":{"example":"12345","type":"string"},"userStatus":{"example":1,"format":"int32","type":"integer","description":"User Status"},"id":{"example":10,"format":"int64","type":"integer"},"lastName":{"example":"James","type":"string"}}}</json_validation_file>
+    <json_validation_file checksum="n2XDgj5__Eo626jAXZaRIg" name="json_POST_~api~v3~user~createWithList">{"components":{"schemas":{"User":{"xml":{"name":"user"},"type":"object","properties":{"firstName":{"example":"John","type":"string"},"phone":{"example":"12345","type":"string"},"username":{"example":"theUser","type":"string"},"email":{"example":"john@email.com","type":"string"},"password":{"example":"12345","type":"string"},"userStatus":{"format":"int32","example":1,"type":"integer","description":"User Status"},"lastName":{"example":"James","type":"string"},"id":{"format":"int64","example":10,"type":"integer"}}}}},"type":"array","$schema":"http://json-schema.org/draft-04/schema#","items":{"$ref":"#/components/schemas/User"}}</json_validation_file>
+    <json_validation_file checksum="Q2S7D2H4aAkR1iJXWVGb1Q" name="json_POST_~api~v3~pet">{"required":["name","photoUrls"],"xml":{"name":"pet"},"components":{"schemas":{"Category":{"xml":{"name":"category"},"type":"object","properties":{"name":{"example":"Dogs","type":"string"},"id":{"format":"int64","example":1,"type":"integer"}}},"Tag":{"xml":{"name":"tag"},"type":"object","properties":{"name":{"type":"string"},"id":{"format":"int64","type":"integer"}}}}},"type":"object","$schema":"http://json-schema.org/draft-04/schema#","properties":{"photoUrls":{"xml":{"wrapped":true},"type":"array","items":{"xml":{"name":"photoUrl"},"type":"string"}},"status":{"enum":["available","pending","sold"],"type":"string","description":"pet status in the store"},"name":{"example":"doggie","type":"string"},"category":{"$ref":"#/components/schemas/Category"},"id":{"example":10,"format":"int64","type":"integer"},"tags":{"xml":{"wrapped":true},"type":"array","items":{"$ref":"#/components/schemas/Tag"}}}}</json_validation_file>
+    <json_validation_file checksum="SA-FzKy-jWIG-4AD9XFjJQ" name="json_POST_~api~v3~store~order">{"xml":{"name":"order"},"type":"object","$schema":"http://json-schema.org/draft-04/schema#","properties":{"shipDate":{"format":"date-time","type":"string"},"status":{"example":"approved","enum":["placed","approved","delivered"],"type":"string","description":"Order Status"},"quantity":{"example":7,"format":"int32","type":"integer"},"id":{"example":10,"format":"int64","type":"integer"},"petId":{"example":198772,"format":"int64","type":"integer"},"complete":{"type":"boolean"}}}</json_validation_file>
+    <json_validation_file checksum="yjBjBSF2UeiqNBZi-74NEA" name="json_PUT_~api~v3~pet">{"required":["name","photoUrls"],"xml":{"name":"pet"},"components":{"schemas":{"Category":{"xml":{"name":"category"},"type":"object","properties":{"name":{"example":"Dogs","type":"string"},"id":{"format":"int64","example":1,"type":"integer"}}},"Tag":{"xml":{"name":"tag"},"type":"object","properties":{"name":{"type":"string"},"id":{"format":"int64","type":"integer"}}}}},"type":"object","$schema":"http://json-schema.org/draft-04/schema#","properties":{"photoUrls":{"xml":{"wrapped":true},"type":"array","items":{"xml":{"name":"photoUrl"},"type":"string"}},"status":{"enum":["available","pending","sold"],"type":"string","description":"pet status in the store"},"name":{"example":"doggie","type":"string"},"category":{"$ref":"#/components/schemas/Category"},"id":{"example":10,"format":"int64","type":"integer"},"tags":{"xml":{"wrapped":true},"type":"array","items":{"$ref":"#/components/schemas/Tag"}}}}</json_validation_file>
+  </json_validation_files>
   <json_profiles>
-    <json_profile name="Default">
-      <description>Default JSON Profile</description>
+    <json_profile name="json_POST_~api~v3~pet">
+      <description></description>
       <check_element_metachars>true</check_element_metachars>
       <check_attribute_metachars>false</check_attribute_metachars>
       <check_signatures>true</check_signatures>
-      <handle_json_parameters>true</handle_json_parameters>
-      <defense_setting enabled="false" name="Maximum Total Length Of JSON Data">10000</defense_setting>
-      <defense_setting enabled="false" name="Maximum Value Length">100</defense_setting>
-      <defense_setting enabled="false" name="Maximum Structure Depth">10</defense_setting>
-      <defense_setting enabled="false" name="Maximum Array Length">1000</defense_setting>
-      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">1</defense_setting>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="Q2S7D2H4aAkR1iJXWVGb1Q" name="json_POST_~api~v3~pet">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
+    </json_profile>
+    <json_profile name="json_POST_~api~v3~store~order">
+      <description></description>
+      <check_element_metachars>true</check_element_metachars>
+      <check_attribute_metachars>false</check_attribute_metachars>
+      <check_signatures>true</check_signatures>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="SA-FzKy-jWIG-4AD9XFjJQ" name="json_POST_~api~v3~store~order">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
+    </json_profile>
+    <json_profile name="json_POST_~api~v3~user">
+      <description></description>
+      <check_element_metachars>true</check_element_metachars>
+      <check_attribute_metachars>false</check_attribute_metachars>
+      <check_signatures>true</check_signatures>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="kNVnY0RYBD11sf0lcepAPg" name="json_POST_~api~v3~user">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
+    </json_profile>
+    <json_profile name="json_POST_~api~v3~user~createWithList">
+      <description></description>
+      <check_element_metachars>true</check_element_metachars>
+      <check_attribute_metachars>false</check_attribute_metachars>
+      <check_signatures>true</check_signatures>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="n2XDgj5__Eo626jAXZaRIg" name="json_POST_~api~v3~user~createWithList">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
+    </json_profile>
+    <json_profile name="json_PUT_~api~v3~pet">
+      <description></description>
+      <check_element_metachars>true</check_element_metachars>
+      <check_attribute_metachars>false</check_attribute_metachars>
+      <check_signatures>true</check_signatures>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="yjBjBSF2UeiqNBZi-74NEA" name="json_PUT_~api~v3~pet">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
+    </json_profile>
+    <json_profile name="json_PUT_~api~v3~user~#">
+      <description></description>
+      <check_element_metachars>true</check_element_metachars>
+      <check_attribute_metachars>false</check_attribute_metachars>
+      <check_signatures>true</check_signatures>
+      <handle_json_parameters>false</handle_json_parameters>
+      <json_validation_file checksum="jvDQgL2myeObTLWqXG_QBg" name="json_PUT_~api~v3~user~#">
+        <is_primary>true</is_primary>
+      </json_validation_file>
+      <defense_setting enabled="true" name="Maximum Total Length Of JSON Data">10000</defense_setting>
+      <defense_setting enabled="true" name="Maximum Value Length">100</defense_setting>
+      <defense_setting enabled="true" name="Maximum Structure Depth">10</defense_setting>
+      <defense_setting enabled="true" name="Maximum Array Length">1000</defense_setting>
+      <defense_setting enabled="true" name="Tolerate JSON Parsing Warnings">0</defense_setting>
     </json_profile>
     <character_set>
       <metachar character="0x0">disallow</metachar>
@@ -2044,6 +2130,20 @@ Connection: close</response_header>
     </graphql_profile>
   </graphql_profiles>
   <file_types>
+    <file_type type="explicit" name="no_ext">
+      <learning_mode>Never</learning_mode>
+      <url_length>100</url_length>
+      <request_length>5000</request_length>
+      <query_string_length>1000</query_string_length>
+      <post_data_length>1000</post_data_length>
+      <check_response>false</check_response>
+      <in_staging>true</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <check_url_length>true</check_url_length>
+      <check_request_length>true</check_request_length>
+      <check_query_string_length>true</check_query_string_length>
+      <check_post_data_length>true</check_post_data_length>
+    </file_type>
     <file_type type="wildcard" name="*">
       <wildcard_order>1</wildcard_order>
       <learning_mode>Never</learning_mode>
@@ -2053,7 +2153,7 @@ Connection: close</response_header>
       <post_data_length>4096</post_data_length>
       <check_response>false</check_response>
       <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
       <check_url_length>false</check_url_length>
       <check_request_length>false</check_request_length>
       <check_query_string_length>false</check_query_string_length>
@@ -2110,23 +2210,1458 @@ Connection: close</response_header>
     </disallowed_file_types>
   </file_types>
   <urls>
-    <url method="*" protocol="HTTPS" type="wildcard" name="*">
+    <url method="GET" protocol="HTTP" type="explicit" name="/api/v3/pennnnnnnnnnn/findByStatusss">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Finds Pets by status.
+Multiple status values can be provided with comma separated strings.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>findPetsByStatus</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="status">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>true</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+        <static_value>available</static_value>
+        <static_value>pending</static_value>
+        <static_value>sold</static_value>
+      </parameter>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="POST" protocol="HTTP" type="explicit" name="/api/v3/pet">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Add a new pet to the store.
+Add a new pet to the store.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>addPet</operation_id>
+      <mandatory_body>true</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="name">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>true</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="status">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+        <static_value>available</static_value>
+        <static_value>pending</static_value>
+        <static_value>sold</static_value>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/x-www-form-urlencoded</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>http</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>Default</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/xml</header_value>
+        <header_order>3</header_order>
+        <enforcement_type>xml</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_POST_~api~v3~pet</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/json</header_value>
+        <header_order>2</header_order>
+        <enforcement_type>json</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="PUT" protocol="HTTP" type="explicit" name="/api/v3/pet">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Update an existing pet.
+Update an existing pet by Id.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>updatePet</operation_id>
+      <mandatory_body>true</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="name">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>true</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="status">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+        <static_value>available</static_value>
+        <static_value>pending</static_value>
+        <static_value>sold</static_value>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/x-www-form-urlencoded</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>http</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>Default</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/xml</header_value>
+        <header_order>3</header_order>
+        <enforcement_type>xml</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_PUT_~api~v3~pet</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/json</header_value>
+        <header_order>2</header_order>
+        <enforcement_type>json</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="GET" protocol="HTTP" type="explicit" name="/api/v3/pet/findByTags">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Finds Pets by tags.
+Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>findPetsByTags</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="tags">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>true</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>array</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <array_serialization_format>csv</array_serialization_format>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="GET" protocol="HTTP" type="explicit" name="/api/v3/store/inventory">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Returns pet inventories by status.
+Returns a map of status codes to quantities.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>getInventory</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="POST" protocol="HTTP" type="explicit" name="/api/v3/store/order">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Place an order for a pet.
+Place a new order in the store.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>placeOrder</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="complete">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>boolean</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="petId">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="id">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="quantity">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="status">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+        <static_value>approved</static_value>
+        <static_value>delivered</static_value>
+        <static_value>placed</static_value>
+      </parameter>
+      <parameter type="explicit" name="shipDate">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression>^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))T(0\d|1\d|2[0-3]):([0-5]\d):([0-5]\d)(\.\d+)?(Z|((\+|-)(0\d|1\d|2[0-3]):([0-5]\d)))$</match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/x-www-form-urlencoded</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>http</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>Default</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/xml</header_value>
+        <header_order>3</header_order>
+        <enforcement_type>xml</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_POST_~api~v3~store~order</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/json</header_value>
+        <header_order>2</header_order>
+        <enforcement_type>json</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="POST" protocol="HTTP" type="explicit" name="/api/v3/user">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Create user.
+This can only be done by the logged in user.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>createUser</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="lastName">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="id">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="userStatus">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="password">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="email">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="username">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="phone">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="firstName">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/x-www-form-urlencoded</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>http</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>Default</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/xml</header_value>
+        <header_order>3</header_order>
+        <enforcement_type>xml</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_POST_~api~v3~user</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/json</header_value>
+        <header_order>2</header_order>
+        <enforcement_type>json</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="POST" protocol="HTTP" type="explicit" name="/api/v3/user/createWithList">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Creates list of users with given input array.
+Creates list of users with given input array.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>createUsersWithListInput</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_POST_~api~v3~user~createWithList</profile_name>
+        <header_name>Content-Type</header_name>
+        <header_value>application/json</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>json</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="GET" protocol="HTTP" type="explicit" name="/api/v3/user/login">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Logs user into the system.
+Log into the system.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>loginUser</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="password">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="username">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="GET" protocol="HTTP" type="explicit" name="/api/v3/user/logout">
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Logs out current logged in user session.
+Log user out of the system.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>false</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>logoutUser</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+    </url>
+    <url method="DELETE" protocol="HTTP" type="wildcard" name="/api/v3/pet/*">
       <wildcard_order>1</wildcard_order>
       <learning_mode>Never</learning_mode>
       <check_flows>false</check_flows>
       <is_entry_point>false</is_entry_point>
       <is_referrer>false</is_referrer>
       <can_change_domain_cookie>false</can_change_domain_cookie>
-      <description></description>
-      <user_config_level>advanced</user_config_level>
-      <check_metachars>false</check_metachars>
+      <description>Deletes a pet.
+Delete a pet.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
       <check_methods>false</check_methods>
       <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
       <clickjacking_protection>
         <enabled>false</enabled>
         <allow_rendering_in_frames>Never</allow_rendering_in_frames>
-        <allow_rendering_from></allow_rendering_from>
       </clickjacking_protection>
       <cors_enforcement_enable>false</cors_enforcement_enable>
       <allow_cors>false</allow_cors>
@@ -2142,8 +3677,50 @@ Connection: close</response_header>
       <check_attack_signatures>true</check_attack_signatures>
       <in_classification>false</in_classification>
       <is_allowed>true</is_allowed>
+      <operation_id>deletePet</operation_id>
       <mandatory_body>false</mandatory_body>
       <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="api_key">
+        <location>header</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>true</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
       <content_profile>
         <header_name>*</header_name>
         <header_value>*</header_value>
@@ -2151,47 +3728,27 @@ Connection: close</response_header>
         <enforcement_type>apply_value_signatures</enforcement_type>
         <decode_value_as_base64>disabled</decode_value_as_base64>
       </content_profile>
-      <content_profile>
-        <profile_name>Default</profile_name>
-        <header_name>Content-Type</header_name>
-        <header_value>*json*</header_value>
-        <header_order>2</header_order>
-        <enforcement_type>json</enforcement_type>
-        <decode_value_as_base64>disabled</decode_value_as_base64>
-      </content_profile>
-      <content_profile>
-        <profile_name>Default</profile_name>
-        <header_name>Content-Type</header_name>
-        <header_value>*xml*</header_value>
-        <header_order>3</header_order>
-        <enforcement_type>xml</enforcement_type>
-        <decode_value_as_base64>disabled</decode_value_as_base64>
-      </content_profile>
-      <content_profile>
-        <header_name>Content-Type</header_name>
-        <header_value>*form*</header_value>
-        <header_order>1</header_order>
-        <enforcement_type>http</enforcement_type>
-        <decode_value_as_base64>disabled</decode_value_as_base64>
-      </content_profile>
+      <positional_parameter name="DELETE_~api~v3~pet~#_petId">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
     </url>
-    <url method="*" protocol="HTTP" type="wildcard" name="*">
+    <url method="POST" protocol="HTTP" type="wildcard" name="/api/v3/pet/*">
       <wildcard_order>2</wildcard_order>
       <learning_mode>Never</learning_mode>
       <check_flows>false</check_flows>
       <is_entry_point>false</is_entry_point>
       <is_referrer>false</is_referrer>
       <can_change_domain_cookie>false</can_change_domain_cookie>
-      <description></description>
-      <user_config_level>advanced</user_config_level>
-      <check_metachars>false</check_metachars>
+      <description>Updates a pet in the store with form data.
+Updates a pet resource based on the form data.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
       <check_methods>false</check_methods>
       <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
       <clickjacking_protection>
         <enabled>false</enabled>
         <allow_rendering_in_frames>Never</allow_rendering_in_frames>
-        <allow_rendering_from></allow_rendering_from>
       </clickjacking_protection>
       <cors_enforcement_enable>false</cors_enforcement_enable>
       <allow_cors>false</allow_cors>
@@ -2207,15 +3764,91 @@ Connection: close</response_header>
       <check_attack_signatures>true</check_attack_signatures>
       <in_classification>false</in_classification>
       <is_allowed>true</is_allowed>
+      <operation_id>updatePetWithForm</operation_id>
       <mandatory_body>false</mandatory_body>
       <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
-      <content_profile>
-        <header_name>Content-Type</header_name>
-        <header_value>*form*</header_value>
-        <header_order>1</header_order>
-        <enforcement_type>http</enforcement_type>
+      <parameter type="explicit" name="name">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
         <decode_value_as_base64>disabled</decode_value_as_base64>
-      </content_profile>
+      </parameter>
+      <parameter type="explicit" name="status">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
       <content_profile>
         <header_name>*</header_name>
         <header_value>*</header_value>
@@ -2223,22 +3856,689 @@ Connection: close</response_header>
         <enforcement_type>apply_value_signatures</enforcement_type>
         <decode_value_as_base64>disabled</decode_value_as_base64>
       </content_profile>
+      <positional_parameter name="POST_~api~v3~pet~#_petId">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="GET" protocol="HTTP" type="wildcard" name="/api/v3/pet/*">
+      <wildcard_order>3</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Find pet by ID.
+Returns a single pet.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>getPetById</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="GET_~api~v3~pet~#_petId">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="PUT" protocol="HTTP" type="wildcard" name="/api/v3/user/*">
+      <wildcard_order>4</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Update user resource.
+This can only be done by the logged in user.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>updateUser</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="phone">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="lastName">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="id">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="userStatus">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format>integer</user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="password">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="firstName">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <parameter type="explicit" name="email">
+        <location>form-data</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/x-www-form-urlencoded</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>http</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
       <content_profile>
         <profile_name>Default</profile_name>
         <header_name>Content-Type</header_name>
-        <header_value>*xml*</header_value>
+        <header_value>application/xml</header_value>
         <header_order>3</header_order>
         <enforcement_type>xml</enforcement_type>
         <decode_value_as_base64>disabled</decode_value_as_base64>
       </content_profile>
       <content_profile>
-        <profile_name>Default</profile_name>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <profile_name>json_PUT_~api~v3~user~#</profile_name>
         <header_name>Content-Type</header_name>
-        <header_value>*json*</header_value>
+        <header_value>application/json</header_value>
         <header_order>2</header_order>
         <enforcement_type>json</enforcement_type>
         <decode_value_as_base64>disabled</decode_value_as_base64>
       </content_profile>
+      <positional_parameter name="PUT_~api~v3~user~#_username">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="DELETE" protocol="HTTP" type="wildcard" name="/api/v3/user/*">
+      <wildcard_order>5</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Delete user resource.
+This can only be done by the logged in user.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>deleteUser</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="DELETE_~api~v3~user~#_username">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="GET" protocol="HTTP" type="wildcard" name="/api/v3/user/*">
+      <wildcard_order>6</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Get user by user name.
+Get user detail based on username.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>getUserByName</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="GET_~api~v3~user~#_username">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="POST" protocol="HTTP" type="wildcard" name="/api/v3/pet/*/uploadImage">
+      <wildcard_order>7</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Uploads an image.
+Upload image of the pet.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>uploadFile</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <parameter type="explicit" name="additionalMetadata">
+        <location>query</location>
+        <learning_mode>Never</learning_mode>
+        <is_mandatory>false</is_mandatory>
+        <allow_empty_value>false</allow_empty_value>
+        <value_type>user input</value_type>
+        <user_input_format></user_input_format>
+        <minimum_value>0</minimum_value>
+        <maximum_value>10</maximum_value>
+        <maximum_length>10</maximum_length>
+        <minimum_length>0</minimum_length>
+        <is_header>false</is_header>
+        <is_cookie>false</is_cookie>
+        <match_regular_expression></match_regular_expression>
+        <is_sensitive>false</is_sensitive>
+        <in_staging>false</in_staging>
+        <last_updated>2025-12-04T09:54:10Z</last_updated>
+        <parameter_name_metachars>
+          <check_metachars>true</check_metachars>
+        </parameter_name_metachars>
+        <check_maximum_length>false</check_maximum_length>
+        <check_minimum_length>false</check_minimum_length>
+        <check_maximum_value>false</check_maximum_value>
+        <check_minimum_value>false</check_minimum_value>
+        <check_metachars>true</check_metachars>
+        <check_attack_signatures>true</check_attack_signatures>
+        <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+        <in_classification>false</in_classification>
+        <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+        <host_name_representation>domain-name</host_name_representation>
+        <check_min_items_in_array>false</check_min_items_in_array>
+        <check_max_items_in_array>false</check_max_items_in_array>
+        <minimum_items_in_array>1</minimum_items_in_array>
+        <maximum_items_in_array>100</maximum_items_in_array>
+        <check_array_unique_items>false</check_array_unique_items>
+        <check_exclusive_min>false</check_exclusive_min>
+        <check_exclusive_max>false</check_exclusive_max>
+        <check_multiple_of_value>false</check_multiple_of_value>
+        <multiple_of_value>5</multiple_of_value>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </parameter>
+      <content_profile>
+        <header_name>Content-Type</header_name>
+        <header_value>application/octet-stream</header_value>
+        <header_order>1</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>disallow</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="POST_~api~v3~pet~#~uploadImage_petId">
+        <url_segment_index>4</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="DELETE" protocol="HTTP" type="wildcard" name="/api/v3/store/order/*">
+      <wildcard_order>8</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Delete purchase order by identifier.
+For valid response try integer IDs with value &lt; 1000. Anything above 1000 or non-integers will generate API errors.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>deleteOrder</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="DELETE_~api~v3~store~order~#_orderId">
+        <url_segment_index>5</url_segment_index>
+      </positional_parameter>
+    </url>
+    <url method="GET" protocol="HTTP" type="wildcard" name="/api/v3/store/order/*">
+      <wildcard_order>9</wildcard_order>
+      <learning_mode>Never</learning_mode>
+      <check_flows>false</check_flows>
+      <is_entry_point>false</is_entry_point>
+      <is_referrer>false</is_referrer>
+      <can_change_domain_cookie>false</can_change_domain_cookie>
+      <description>Find purchase order by ID.
+For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values will generate exceptions.</description>
+      <user_config_level>basic</user_config_level>
+      <check_metachars>true</check_metachars>
+      <check_methods>false</check_methods>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:53:43Z</last_updated>
+      <clickjacking_protection>
+        <enabled>false</enabled>
+        <allow_rendering_in_frames>Never</allow_rendering_in_frames>
+      </clickjacking_protection>
+      <cors_enforcement_enable>false</cors_enforcement_enable>
+      <allow_cors>false</allow_cors>
+      <cors_allow_credentials_handling>unmodified</cors_allow_credentials_handling>
+      <cors_allow_credentials_value>disallow</cors_allow_credentials_value>
+      <cors_check_maximum_age>false</cors_check_maximum_age>
+      <cors_maximum_age>1800</cors_maximum_age>
+      <cors_allowed_origins_handling>unmodified</cors_allowed_origins_handling>
+      <cors_allowed_methods_handling>unmodified</cors_allowed_methods_handling>
+      <cors_allowed_headers_handling>unmodified</cors_allowed_headers_handling>
+      <cors_exposed_headers_handling>unmodified</cors_exposed_headers_handling>
+      <flg_wildcard_includes_slash>true</flg_wildcard_includes_slash>
+      <check_attack_signatures>true</check_attack_signatures>
+      <in_classification>false</in_classification>
+      <is_allowed>true</is_allowed>
+      <operation_id>getOrderById</operation_id>
+      <mandatory_body>false</mandatory_body>
+      <disallow_file_upload_of_executables>false</disallow_file_upload_of_executables>
+      <content_profile>
+        <header_name>*</header_name>
+        <header_value>*</header_value>
+        <header_order>0</header_order>
+        <enforcement_type>apply_value_signatures</enforcement_type>
+        <decode_value_as_base64>disabled</decode_value_as_base64>
+      </content_profile>
+      <positional_parameter name="GET_~api~v3~store~order~#_orderId">
+        <url_segment_index>5</url_segment_index>
+      </positional_parameter>
     </url>
     <character_set>
       <metachar character="0x0">disallow</metachar>
@@ -2499,71 +4799,17 @@ Connection: close</response_header>
       <metachar character="0xff">allow</metachar>
     </character_set>
   </urls>
-  <websocket_urls>
-    <websocket_url protocol="WS" type="wildcard" name="*">
-      <wildcard_order>1</wildcard_order>
-      <learning_mode>Never</learning_mode>
-      <description></description>
-      <user_config_level>advanced</user_config_level>
-      <check_metachars>false</check_metachars>
-      <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
-      <cors_enforcement_enable>false</cors_enforcement_enable>
-      <allow_cors>false</allow_cors>
-      <wildcard_includes_slash>true</wildcard_includes_slash>
-      <websocket_extension>remove</websocket_extension>
-      <websocket_message_format_text>true</websocket_message_format_text>
-      <websocket_message_format_json>true</websocket_message_format_json>
-      <websocket_message_format_binary>true</websocket_message_format_binary>
-      <message_max_binary_size>10000</message_max_binary_size>
-      <message_max_frame_size>10000</message_max_frame_size>
-      <message_max_frames>100</message_max_frames>
-      <json_profile_name>Default</json_profile_name>
-      <plain_text_profile_name>Default</plain_text_profile_name>
-      <check_payload>true</check_payload>
-      <check_message_max_binary_size>false</check_message_max_binary_size>
-      <check_message_max_frame_size>false</check_message_max_frame_size>
-      <check_message_max_frames>false</check_message_max_frames>
-      <in_classification>false</in_classification>
-      <is_allowed>true</is_allowed>
-    </websocket_url>
-    <websocket_url protocol="WSS" type="wildcard" name="*">
-      <wildcard_order>2</wildcard_order>
-      <learning_mode>Never</learning_mode>
-      <description></description>
-      <user_config_level>advanced</user_config_level>
-      <check_metachars>false</check_metachars>
-      <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
-      <cors_enforcement_enable>false</cors_enforcement_enable>
-      <allow_cors>false</allow_cors>
-      <wildcard_includes_slash>true</wildcard_includes_slash>
-      <websocket_extension>remove</websocket_extension>
-      <websocket_message_format_text>true</websocket_message_format_text>
-      <websocket_message_format_json>true</websocket_message_format_json>
-      <websocket_message_format_binary>true</websocket_message_format_binary>
-      <message_max_binary_size>10000</message_max_binary_size>
-      <message_max_frame_size>10000</message_max_frame_size>
-      <message_max_frames>100</message_max_frames>
-      <json_profile_name>Default</json_profile_name>
-      <plain_text_profile_name>Default</plain_text_profile_name>
-      <check_payload>true</check_payload>
-      <check_message_max_binary_size>false</check_message_max_binary_size>
-      <check_message_max_frame_size>false</check_message_max_frame_size>
-      <check_message_max_frames>false</check_message_max_frames>
-      <in_classification>false</in_classification>
-      <is_allowed>true</is_allowed>
-    </websocket_url>
-  </websocket_urls>
+  <websocket_urls/>
   <parameters>
-    <parameter type="explicit" name="__VIEWSTATE">
-      <location>any</location>
+    <parameter type="explicit" name="DELETE_~api~v3~pet~#_petId">
+      <location>path</location>
       <learning_mode>Never</learning_mode>
       <is_mandatory>false</is_mandatory>
-      <allow_empty_value>true</allow_empty_value>
-      <value_type>ignore</value_type>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
       <minimum_value>0</minimum_value>
-      <maximum_value>0</maximum_value>
+      <maximum_value>10</maximum_value>
       <maximum_length>10</maximum_length>
       <minimum_length>0</minimum_length>
       <is_header>false</is_header>
@@ -2571,16 +4817,16 @@ Connection: close</response_header>
       <match_regular_expression></match_regular_expression>
       <is_sensitive>false</is_sensitive>
       <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
       <parameter_name_metachars>
-        <check_metachars>false</check_metachars>
+        <check_metachars>true</check_metachars>
       </parameter_name_metachars>
       <check_maximum_length>false</check_maximum_length>
       <check_minimum_length>false</check_minimum_length>
       <check_maximum_value>false</check_maximum_value>
       <check_minimum_value>false</check_minimum_value>
-      <check_metachars>false</check_metachars>
-      <check_attack_signatures>false</check_attack_signatures>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
       <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
       <in_classification>false</in_classification>
       <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
@@ -2596,33 +4842,33 @@ Connection: close</response_header>
       <multiple_of_value>5</multiple_of_value>
       <decode_value_as_base64>disabled</decode_value_as_base64>
     </parameter>
-    <parameter type="wildcard" name="*">
-      <location>any</location>
-      <wildcard_order>1</wildcard_order>
+    <parameter type="explicit" name="DELETE_~api~v3~store~order~#_orderId">
+      <location>path</location>
       <learning_mode>Never</learning_mode>
       <is_mandatory>false</is_mandatory>
-      <allow_empty_value>true</allow_empty_value>
-      <value_type>auto detect</value_type>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
       <minimum_value>0</minimum_value>
-      <maximum_value>0</maximum_value>
-      <maximum_length>0</maximum_length>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
       <minimum_length>0</minimum_length>
       <is_header>false</is_header>
       <is_cookie>false</is_cookie>
       <match_regular_expression></match_regular_expression>
       <is_sensitive>false</is_sensitive>
       <in_staging>false</in_staging>
-      <last_updated>2026-04-20T08:44:16Z</last_updated>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
       <parameter_name_metachars>
-        <check_metachars>false</check_metachars>
+        <check_metachars>true</check_metachars>
       </parameter_name_metachars>
       <check_maximum_length>false</check_maximum_length>
       <check_minimum_length>false</check_minimum_length>
       <check_maximum_value>false</check_maximum_value>
       <check_minimum_value>false</check_minimum_value>
-      <check_metachars>false</check_metachars>
+      <check_metachars>true</check_metachars>
       <check_attack_signatures>true</check_attack_signatures>
-      <allow_repeated_parameter_name>true</allow_repeated_parameter_name>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
       <in_classification>false</in_classification>
       <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
       <host_name_representation>domain-name</host_name_representation>
@@ -2635,7 +4881,294 @@ Connection: close</response_header>
       <check_exclusive_max>false</check_exclusive_max>
       <check_multiple_of_value>false</check_multiple_of_value>
       <multiple_of_value>5</multiple_of_value>
-      <decode_value_as_base64>enabled</decode_value_as_base64>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="DELETE_~api~v3~user~#_username">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format></user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="GET_~api~v3~pet~#_petId">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="GET_~api~v3~store~order~#_orderId">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="GET_~api~v3~user~#_username">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format></user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="POST_~api~v3~pet~#_petId">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="POST_~api~v3~pet~#~uploadImage_petId">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format>integer</user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
+    </parameter>
+    <parameter type="explicit" name="PUT_~api~v3~user~#_username">
+      <location>path</location>
+      <learning_mode>Never</learning_mode>
+      <is_mandatory>false</is_mandatory>
+      <allow_empty_value>false</allow_empty_value>
+      <value_type>user input</value_type>
+      <user_input_format></user_input_format>
+      <minimum_value>0</minimum_value>
+      <maximum_value>10</maximum_value>
+      <maximum_length>10</maximum_length>
+      <minimum_length>0</minimum_length>
+      <is_header>false</is_header>
+      <is_cookie>false</is_cookie>
+      <match_regular_expression></match_regular_expression>
+      <is_sensitive>false</is_sensitive>
+      <in_staging>false</in_staging>
+      <last_updated>2025-12-04T09:54:10Z</last_updated>
+      <parameter_name_metachars>
+        <check_metachars>true</check_metachars>
+      </parameter_name_metachars>
+      <check_maximum_length>false</check_maximum_length>
+      <check_minimum_length>false</check_minimum_length>
+      <check_maximum_value>false</check_maximum_value>
+      <check_minimum_value>false</check_minimum_value>
+      <check_metachars>true</check_metachars>
+      <check_attack_signatures>true</check_attack_signatures>
+      <allow_repeated_parameter_name>false</allow_repeated_parameter_name>
+      <in_classification>false</in_classification>
+      <disallow_file_upload_of_executables>true</disallow_file_upload_of_executables>
+      <host_name_representation>domain-name</host_name_representation>
+      <check_min_items_in_array>false</check_min_items_in_array>
+      <check_max_items_in_array>false</check_max_items_in_array>
+      <minimum_items_in_array>1</minimum_items_in_array>
+      <maximum_items_in_array>100</maximum_items_in_array>
+      <check_array_unique_items>false</check_array_unique_items>
+      <check_exclusive_min>false</check_exclusive_min>
+      <check_exclusive_max>false</check_exclusive_max>
+      <check_multiple_of_value>false</check_multiple_of_value>
+      <multiple_of_value>5</multiple_of_value>
+      <decode_value_as_base64>disabled</decode_value_as_base64>
     </parameter>
     <character_set>
       <metachar character="0x0">disallow</metachar>
@@ -3162,6 +5695,8 @@ Connection: close</response_header>
   <flows>
     <flow_access>
       <expiration_period>0</expiration_period>
+      <authenticated_url url="/about.php"/>
+      <authenticated_url url="/vulnerabilities/sqli/"/>
       <response_page>
         <response_type>default</response_type>
         <response_header>HTTP/1.1 200 OK
@@ -3467,120 +6002,16 @@ Connection: close</response_header>
       <learn>true</learn>
     </signature_set>
     <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="MySQL Signatures (High/Medium Accuracy)" id="300000000">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>0</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>MySQL Signatures (High/Medium Accuracy)</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <accuracy_op>ge</accuracy_op>
-          <accuracy_val>2</accuracy_val>
-        </filter>
-        <systems>
-          <system_name>MySQL</system_name>
-        </systems>
-      </set>
-      <alarm>true</alarm>
-      <block>true</block>
-      <learn>false</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JavaScript Signatures (High/Medium Accuracy)" id="300000001">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>0</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>JavaScript Signatures (High/Medium Accuracy)</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <accuracy_op>ge</accuracy_op>
-          <accuracy_val>2</accuracy_val>
-        </filter>
-        <systems>
-          <system_name>JavaScript</system_name>
-        </systems>
-      </set>
-      <alarm>true</alarm>
-      <block>true</block>
-      <learn>false</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="jQuery Signatures (High/Medium Accuracy)" id="300000002">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>0</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>jQuery Signatures (High/Medium Accuracy)</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <accuracy_op>ge</accuracy_op>
-          <accuracy_val>2</accuracy_val>
-        </filter>
-        <systems>
-          <system_name>jQuery</system_name>
-        </systems>
-      </set>
-      <alarm>true</alarm>
-      <block>true</block>
-      <learn>false</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="custom-set-req" id="300000003">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>1</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>custom-set-req</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <apply_to>Request</apply_to>
-          <flg_is_user_defined>1</flg_is_user_defined>
-        </filter>
-        <systems/>
-      </set>
-      <alarm>true</alarm>
-      <block>true</block>
-      <learn>true</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="custom-set-res" id="300000004">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>0</flg_reject_default>
-        <flg_assign_to_policy_default>1</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>custom-set-res</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <apply_to>Response</apply_to>
-          <flg_is_user_defined>1</flg_is_user_defined>
-        </filter>
-        <systems/>
-      </set>
+      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="All Response Signatures" id="299999988"/>
       <alarm>true</alarm>
       <block>false</block>
-      <learn>true</learn>
+      <learn>false</learn>
+    </signature_set>
+    <signature_set>
+      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="All Signatures" id="299999999"/>
+      <alarm>true</alarm>
+      <block>false</block>
+      <learn>false</learn>
     </signature_set>
     <signature_set>
       <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="niki-custom-set" id="300000005">
@@ -3598,54 +6029,6 @@ Connection: close</response_header>
           <flg_is_user_defined>1</flg_is_user_defined>
         </filter>
         <systems/>
-      </set>
-      <alarm>true</alarm>
-      <block>false</block>
-      <learn>true</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Unix/Linux Signatures (High/Medium Accuracy)" id="300000006">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>0</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>Unix/Linux Signatures (High/Medium Accuracy)</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <accuracy_op>ge</accuracy_op>
-          <accuracy_val>2</accuracy_val>
-        </filter>
-        <systems>
-          <system_name>Unix/Linux</system_name>
-        </systems>
-      </set>
-      <alarm>true</alarm>
-      <block>true</block>
-      <learn>false</learn>
-    </signature_set>
-    <signature_set>
-      <set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP Signatures (High/Medium Accuracy)" id="300000008">
-        <flg_alarm_default>1</flg_alarm_default>
-        <flg_learn_default>1</flg_learn_default>
-        <set_group_name>User-defined</set_group_name>
-        <flg_reject_default>1</flg_reject_default>
-        <flg_assign_to_policy_default>0</flg_assign_to_policy_default>
-        <set_flg_is_hidden>0</set_flg_is_hidden>
-        <set_name>PHP Signatures (High/Medium Accuracy)</set_name>
-        <set_flg_is_user_defined>1</set_flg_is_user_defined>
-        <flg_is_manual>0</flg_is_manual>
-        <filter>
-          <flg_is_hidden>0</flg_is_hidden>
-          <accuracy_op>ge</accuracy_op>
-          <accuracy_val>2</accuracy_val>
-        </filter>
-        <systems>
-          <system_name>PHP</system_name>
-        </systems>
       </set>
       <alarm>true</alarm>
       <block>true</block>
@@ -40394,7 +42777,7 @@ Connection: close</response_header>
     </signature>
     <signature name="custom-request" signature_id="300000000">
       <enabled>true</enabled>
-      <in_staging>true</in_staging>
+      <in_staging>false</in_staging>
     </signature>
     <signature name="custom-response" signature_id="300000001">
       <enabled>true</enabled>
@@ -40513,16 +42896,16 @@ Connection: close</response_header>
     <classify_urls>false</classify_urls>
     <classify_websocket_urls>false</classify_websocket_urls>
     <set_method_override_on_url>false</set_method_override_on_url>
-    <filetype>pcx</filetype>
-    <filetype>wav</filetype>
-    <filetype>gif</filetype>
-    <filetype>jpeg</filetype>
-    <filetype>ico</filetype>
-    <filetype>swf</filetype>
-    <filetype>png</filetype>
-    <filetype>pdf</filetype>
-    <filetype>jpg</filetype>
     <filetype>bmp</filetype>
+    <filetype>gif</filetype>
+    <filetype>ico</filetype>
+    <filetype>jpeg</filetype>
+    <filetype>jpg</filetype>
+    <filetype>pcx</filetype>
+    <filetype>pdf</filetype>
+    <filetype>png</filetype>
+    <filetype>swf</filetype>
+    <filetype>wav</filetype>
   </policy_builder_url>
   <policy_builder_header>
     <valid_host_names>false</valid_host_names>
@@ -40696,7 +43079,7 @@ Connection: close</response_header>
     <identify_device>false</identify_device>
     <maximum_prevention_time>3600</maximum_prevention_time>
     <flg_enabled>false</flg_enabled>
-    <last_updated>1775252696</last_updated>
+    <last_updated>1699972222</last_updated>
     <detection_threshold_credentials_stuffing_matches_reached>100</detection_threshold_credentials_stuffing_matches_reached>
     <detection_threshold_action>alarm-and-captcha</detection_threshold_action>
     <login_attempts_from_the_same_user_threshold>3</login_attempts_from_the_same_user_threshold>
@@ -40718,23 +43101,6 @@ Connection: close</response_header>
     <leaked_credentials_detection>false</leaked_credentials_detection>
     <leaked_credentials_action>alarm-and-blocking-page</leaked_credentials_action>
   </brute_force>
-  <server_technologies>
-    <server_technology>
-      <server_technology_name>jQuery</server_technology_name>
-    </server_technology>
-    <server_technology>
-      <server_technology_name>Unix/Linux</server_technology_name>
-    </server_technology>
-    <server_technology>
-      <server_technology_name>PHP</server_technology_name>
-    </server_technology>
-    <server_technology>
-      <server_technology_name>MySQL</server_technology_name>
-    </server_technology>
-    <server_technology>
-      <server_technology_name>JavaScript</server_technology_name>
-    </server_technology>
-  </server_technologies>
   <sections>
     <section type="General Policy Settings">
       <parent_inheritance_status>none</parent_inheritance_status>
@@ -44944,6 +47310,12 @@ Connection: close</response_header>
     <server_technology>Nginx</server_technology>
     <flg_response_by_attack_type>true</flg_response_by_attack_type>
   </deception_settings>
+  <open_api_files>
+    <open_api_file>
+      <filename>openapi.json</filename>
+      <upload_datetime>2025-12-03T16:06:06Z</upload_datetime>
+    </open_api_file>
+  </open_api_files>
   <ssrf_hosts>
     <ssrf_host>
       <host>*</host>
