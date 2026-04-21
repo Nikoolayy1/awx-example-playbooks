@@ -1,0 +1,96 @@
+- name: Upload ASM template
+  hosts: lb
+  gather_facts: false
+  vars:
+    src_url: "https://raw.githubusercontent.com/Nikoolayy1/awx-example-playbooks/refs/heads/main/{{ file }}"
+    local_file: "/tmp/{{ file }}"
+  tasks:
+    - block:
+        - name: Download file from GitHub
+          ansible.builtin.get_url:
+            url: "{{ src_url }}"
+            dest: "{{ local_file }}"
+            mode: "0644"
+            validate_certs: no
+          delegate_to: localhost
+          register: github_result
+        - name: Print github status
+          debug:
+            var: github_result
+        - name: Get file size
+          ansible.builtin.stat:
+            path: "{{ local_file }}"
+          delegate_to: localhost
+          register: file_stat
+        - name: Upload file to F5
+          ansible.builtin.uri:
+            url: "https://{{ inventory_hostname }}/mgmt/tm/asm/file-transfer/uploads/{{ file }}"
+            method: POST
+            user: "{{ ansible_user }}"
+            password: "{{ ansible_ssh_pass }}"
+            force_basic_auth: true
+            validate_certs: false
+            return_content: true
+            headers:
+              Content-Type: "application/octet-stream"
+              Content-Range: "0-{{ file_stat.stat.size | int - 2 }}/{{ file_stat.stat.size | int - 1 }}"
+            body: "{{ lookup('file', local_file) }}"
+            status_code: 200
+          delegate_to: localhost
+          register: file_result
+        - name: Print BIG-IP file upload status
+          debug:
+            var: file_result.content
+        - name: Pause for 10 seconds before creating template from file
+          ansible.builtin.pause:
+            seconds: 10
+        - name: Import ASM (raw inline JSON)
+          ansible.builtin.uri:
+            url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template"
+            method: POST
+            user: "{{ ansible_user }}"
+            password: "{{ ansible_ssh_pass }}"
+            force_basic_auth: yes
+            validate_certs: no
+            return_content: true
+            headers:
+              Content-Type: "application/json"
+            body_format: json
+            body:
+              name: "{{ template_name }}"
+              filename: "{{ file }}"
+            status_code: 201
+          delegate_to: localhost
+          register: template_result
+        - name: Print full response body for template
+          debug:
+            var: template_result.json
+        - name: Set task ID
+          set_fact:
+            asm_task_id: "{{ template_result.json.id }}"
+        - name: See ASM ID after couple of retries
+          ansible.builtin.uri:
+            url: "https://{{ inventory_hostname }}/mgmt/tm/asm/tasks/import-policy-template/{{ asm_task_id }}"
+            method: GET
+            user: "{{ ansible_user }}"
+            password: "{{ ansible_ssh_pass }}"
+            force_basic_auth: yes
+            validate_certs: no
+            return_content: true
+            headers:
+              Content-Type: "application/json"
+            status_code: 200
+          delegate_to: localhost
+          register: until_result
+          retries: 5
+          delay: 5
+          until: until_result.json.status == "COMPLETED"
+          failed_when: false
+        - name: Print full response body for task id
+          debug:
+            var: until_result.json
+      rescue:
+        - name: Print error
+          debug:
+            var: ansible_failed_result
+      when: "'hec' not in (inventory_hostname | string)"
